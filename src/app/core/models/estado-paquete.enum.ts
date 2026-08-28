@@ -1,0 +1,5 @@
+export enum EstadoPaquete {
+  DISPONIBLE = 'DISPONIBLE',
+  RESERVADO = 'RESERVADO',
+  RECOGIDO = 'RECOGIDO',
+}

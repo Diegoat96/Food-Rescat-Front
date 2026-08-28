@@ -1,0 +1,134 @@
+<div class="space-y-6">
+  <div>
+    <h2 class="text-2xl font-bold text-text">Crear Cuenta</h2>
+    <p class="mt-1 text-sm text-text-muted">
+      Únete a la comunidad Food Rescat
+    </p>
+  </div>
+
+  @if (errorMessage()) {
+    <div class="rounded-lg bg-error-light border border-error/20 p-4">
+      <p class="text-sm text-error">{{ errorMessage() }}</p>
+    </div>
+  }
+
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-4">
+    <div>
+      <label for="nombre" class="block text-sm font-medium text-text mb-1">
+        Nombre completo
+      </label>
+      <input
+        id="nombre"
+        type="text"
+        formControlName="nombre"
+        placeholder="Tu nombre"
+        class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50
+               focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20
+               transition-colors"
+        [class.border-error]="isFieldInvalid('nombre')"
+      />
+      @if (isFieldInvalid('nombre')) {
+        <p class="mt-1 text-sm text-error">El nombre es obligatorio.</p>
+      }
+    </div>
+
+    <div>
+      <label for="email" class="block text-sm font-medium text-text mb-1">
+        Correo electrónico
+      </label>
+      <input
+        id="email"
+        type="email"
+        formControlName="email"
+        placeholder="tu@correo.com"
+        class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50
+               focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20
+               transition-colors"
+        [class.border-error]="isFieldInvalid('email')"
+      />
+      @if (isFieldInvalid('email')) {
+        <p class="mt-1 text-sm text-error">
+          @if (registerForm.get('email')?.errors?.['required']) {
+            El correo es obligatorio.
+          } @else if (registerForm.get('email')?.errors?.['email']) {
+            Ingresa un correo válido.
+          }
+        </p>
+      }
+    </div>
+
+    <div>
+      <label for="password" class="block text-sm font-medium text-text mb-1">
+        Contraseña
+      </label>
+      <input
+        id="password"
+        type="password"
+        formControlName="password"
+        placeholder="Mínimo 8 caracteres"
+        class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50
+               focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20
+               transition-colors"
+        [class.border-error]="isFieldInvalid('password')"
+      />
+      @if (isFieldInvalid('password')) {
+        <p class="mt-1 text-sm text-error">
+          @if (registerForm.get('password')?.errors?.['required']) {
+            La contraseña es obligatoria.
+          } @else if (registerForm.get('password')?.errors?.['minlength']) {
+            Mínimo 8 caracteres.
+          }
+        </p>
+      }
+    </div>
+
+    <div>
+      <label for="rol" class="block text-sm font-medium text-text mb-1">
+        Tipo de cuenta
+      </label>
+      <select
+        id="rol"
+        formControlName="rol"
+        class="w-full rounded-lg border border-border px-4 py-3 text-text
+               focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20
+               transition-colors"
+        [class.border-error]="isFieldInvalid('rol')"
+      >
+        <option value="" disabled>Selecciona un tipo</option>
+        <option [value]="Rol.CLIENTE">Cliente — Busco alimentos</option>
+        <option [value]="Rol.COMERCIO">Comercio — Ofrezco alimentos</option>
+      </select>
+      @if (isFieldInvalid('rol')) {
+        <p class="mt-1 text-sm text-error">Selecciona un tipo de cuenta.</p>
+      }
+    </div>
+
+    <button
+      type="submit"
+      [disabled]="registerForm.invalid || isLoading()"
+      class="w-full rounded-lg bg-primary-600 px-4 py-3 text-white font-semibold
+             hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2
+             disabled:opacity-50 disabled:cursor-not-allowed
+             transition-colors"
+    >
+      @if (isLoading()) {
+        <span class="inline-flex items-center gap-2">
+          <svg class="animate-spin h-5 w-5" viewBox="0 0 24 24" fill="none">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
+          Creando cuenta...
+        </span>
+      } @else {
+        Crear Cuenta
+      }
+    </button>
+  </form>
+
+  <p class="text-center text-sm text-text-muted">
+    ¿Ya tienes cuenta?
+    <a routerLink="/auth/login" class="font-semibold text-primary-600 hover:text-primary-700">
+      Inicia sesión
+    </a>
+  </p>
+</div>
