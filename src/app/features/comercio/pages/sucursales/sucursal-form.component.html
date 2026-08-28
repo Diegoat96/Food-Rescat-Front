@@ -1,0 +1,100 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+  <div>
+    <label for="nombreSucursal" class="mb-1 block text-sm font-medium text-text">
+      Nombre de sucursal
+    </label>
+    <input
+      id="nombreSucursal"
+      type="text"
+      formControlName="nombreSucursal"
+      placeholder="Ej: Sucursal Centro"
+      class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+      [class.border-error]="isFieldInvalid('nombreSucursal')"
+    />
+    @if (isFieldInvalid('nombreSucursal')) {
+      <p class="mt-1 text-sm text-error">El nombre es obligatorio.</p>
+    }
+  </div>
+
+  <div>
+    <label for="direccion" class="mb-1 block text-sm font-medium text-text"> Dirección </label>
+    <input
+      id="direccion"
+      type="text"
+      formControlName="direccion"
+      placeholder="Ej: Av. Libertador 1234"
+      class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+      [class.border-error]="isFieldInvalid('direccion')"
+    />
+    @if (isFieldInvalid('direccion')) {
+      <p class="mt-1 text-sm text-error">La dirección es obligatoria.</p>
+    }
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <label for="latitud" class="mb-1 block text-sm font-medium text-text"> Latitud </label>
+      <input
+        id="latitud"
+        type="number"
+        step="any"
+        formControlName="latitud"
+        placeholder="-90 a 90"
+        class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+        [class.border-error]="isFieldInvalid('latitud')"
+      />
+      @if (isFieldInvalid('latitud')) {
+        <p class="mt-1 text-sm text-error">
+          @if (form.get('latitud')?.errors?.['required']) {
+            La latitud es obligatoria.
+          } @else if (form.get('latitud')?.errors?.['noNumerico']) {
+            Debe ser un número.
+          } @else if (form.get('latitud')?.errors?.['fueraRango']) {
+            Debe estar entre -90 y 90.
+          }
+        </p>
+      }
+    </div>
+
+    <div>
+      <label for="longitud" class="mb-1 block text-sm font-medium text-text"> Longitud </label>
+      <input
+        id="longitud"
+        type="number"
+        step="any"
+        formControlName="longitud"
+        placeholder="-180 a 180"
+        class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+        [class.border-error]="isFieldInvalid('longitud')"
+      />
+      @if (isFieldInvalid('longitud')) {
+        <p class="mt-1 text-sm text-error">
+          @if (form.get('longitud')?.errors?.['required']) {
+            La longitud es obligatoria.
+          } @else if (form.get('longitud')?.errors?.['noNumerico']) {
+            Debe ser un número.
+          } @else if (form.get('longitud')?.errors?.['fueraRango']) {
+            Debe estar entre -180 y 180.
+          }
+        </p>
+      }
+    </div>
+  </div>
+
+  <div class="flex justify-end gap-3 pt-1">
+    <button
+      type="button"
+      (click)="cancelar.emit()"
+      class="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-text transition-colors hover:bg-surface-alt"
+    >
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      [disabled]="form.invalid || guardando"
+      class="rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      {{ esEdicion ? 'Guardar cambios' : 'Crear sucursal' }}
+    </button>
+  </div>
+</form>

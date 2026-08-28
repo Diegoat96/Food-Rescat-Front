@@ -1,0 +1,63 @@
+<div class="space-y-6">
+  <div class="flex items-start justify-between">
+    <div>
+      <h2 class="text-2xl font-bold text-text">Sucursales</h2>
+      <p class="mt-1 text-sm text-text-muted">Gestiona las sucursales de tu comercio.</p>
+    </div>
+    <button
+      (click)="abrirCrear()"
+      class="rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700"
+    >
+      + Nueva sucursal
+    </button>
+  </div>
+
+  @if (mostrandoFormulario()) {
+    <section class="rounded-2xl border border-border bg-surface p-5">
+      <h3 class="mb-4 text-sm font-bold uppercase tracking-wide text-text-muted">
+        {{ editando() ? 'Editar sucursal' : 'Nueva sucursal' }}
+      </h3>
+      <app-sucursal-form
+        [sucursal]="editando()"
+        [guardando]="guardando()"
+        (guardar)="guardar($event)"
+        (cancelar)="cerrarFormulario()"
+      />
+    </section>
+  }
+
+  @if (cargando()) {
+    <p class="text-sm text-text-muted">Cargando sucursales…</p>
+  } @else if (sucursales().length === 0) {
+    <div class="rounded-2xl border border-dashed border-border bg-surface p-10 text-center">
+      <div class="text-4xl">🏪</div>
+      <h3 class="mt-3 text-lg font-bold text-text">Aún no tienes sucursales</h3>
+      <p class="mt-1 text-sm text-text-muted">
+        Crea tu primera sucursal para empezar a publicar alimentos.
+      </p>
+    </div>
+  } @else {
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      @for (s of sucursales(); track s.id) {
+        <div class="rounded-2xl border border-border bg-surface p-4">
+          <div class="flex items-start justify-between">
+            <span
+              class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-50 text-lg"
+            >
+              🏪
+            </span>
+            <button
+              (click)="abrirEditar(s)"
+              class="rounded-lg px-2 py-1 text-sm font-semibold text-primary-600 transition-colors hover:bg-primary-50"
+            >
+              Editar
+            </button>
+          </div>
+          <h3 class="mt-3 font-bold text-text">{{ s.nombreSucursal }}</h3>
+          <p class="mt-0.5 text-sm text-text-muted">{{ s.direccion }}</p>
+          <p class="mt-3 font-mono text-xs text-text-muted">{{ s.latitud }}, {{ s.longitud }}</p>
+        </div>
+      }
+    </div>
+  }
+</div>

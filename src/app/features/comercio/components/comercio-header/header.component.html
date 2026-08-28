@@ -1,0 +1,28 @@
+<header class="flex h-16 items-center justify-between border-b border-border bg-surface px-6">
+  <div>
+    <h1 class="text-lg font-bold text-text">Dashboard Comercio</h1>
+    <p class="text-xs text-text-muted">Rescata alimentos, alimenta personas.</p>
+  </div>
+
+  <div class="flex items-center gap-3">
+    @if (usuario()) {
+      <div class="flex items-center gap-2">
+        <span
+          class="flex h-9 w-9 items-center justify-center rounded-full bg-primary-100 text-sm font-bold text-primary-700"
+        >
+          {{ usuario()!.nombre.charAt(0).toUpperCase() }}
+        </span>
+        <div class="hidden sm:block">
+          <p class="text-sm font-semibold text-text">{{ usuario()!.nombre }}</p>
+          <p class="text-xs text-text-muted">{{ usuario()!.email }}</p>
+        </div>
+      </div>
+    }
+    <button
+      (click)="logout()"
+      class="ml-2 rounded-lg bg-error/10 px-3 py-2 text-sm font-medium text-error transition-colors hover:bg-error/20"
+    >
+      Cerrar Sesión
+    </button>
+  </div>
+</header>
