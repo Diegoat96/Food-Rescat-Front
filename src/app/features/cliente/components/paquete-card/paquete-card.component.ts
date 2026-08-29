@@ -1,26 +1,42 @@
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
 import { Paquete } from '../../../../core/models/paquete.model';
 import { EstadoBadgeComponent } from '../estado-badge/estado-badge.component';
+import { ReservasService } from '../../../../core/services/reservas.service';
+import { Reserva } from '../../../../core/models/reserva.model';
+import { FavoritoButtonComponent } from '../favorito-button/favorito-button.component';
 
 @Component({
   selector: 'app-paquete-card',
   standalone: true,
-  imports: [EstadoBadgeComponent],
+  imports: [EstadoBadgeComponent, FavoritoButtonComponent],
   templateUrl: './paquete-card.component.html',
   styleUrl: './paquete-card.component.css',
 })
 export class PaqueteCardComponent {
   @Input({ required: true }) paquete!: Paquete;
-  @Output() reservar = new EventEmitter<Paquete>();
+  @Output() reservaExitosa = new EventEmitter<Reserva>();
 
-  readonly favorito = signal(false);
+  private reservasService = inject(ReservasService);
 
-  toggleFavorito(): void {
-    this.favorito.update((v) => !v);
-  }
+  readonly reservando = signal(false);
+  readonly errorReserva = signal<string | null>(null);
 
   onReservar(): void {
-    this.reservar.emit(this.paquete);
+    if (this.reservando()) {
+      return;
+    }
+    this.reservando.set(true);
+    this.errorReserva.set(null);
+    this.reservasService.reservar(this.paquete.id).subscribe({
+      next: (res) => {
+        this.reservando.set(false);
+        this.reservaExitosa.emit(res.reserva ?? (res as unknown as Reserva));
+      },
+      error: () => {
+        this.reservando.set(false);
+        this.errorReserva.set('Este paquete ya no tiene stock disponible. Intenta con otro.');
+      },
+    });
   }
 
   emoji(): string {

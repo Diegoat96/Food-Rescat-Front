@@ -1,0 +1,66 @@
+<div class="mx-auto max-w-3xl space-y-6 p-6 lg:p-8">
+  <div>
+    <h2 class="text-2xl font-bold text-text">Mi historial</h2>
+    <p class="mt-1 text-sm text-text-muted">
+      Tus rescates completados y sus valoraciones.
+    </p>
+  </div>
+
+  @if (error()) {
+    <div class="rounded-2xl border border-error/20 bg-error-light p-4">
+      <p class="text-sm font-semibold text-error">{{ error() }}</p>
+      <button
+        type="button"
+        (click)="cargar()"
+        class="mt-2 text-sm font-semibold text-primary-600 hover:text-primary-700"
+      >
+        Reintentar
+      </button>
+    </div>
+  } @else if (cargando()) {
+    <app-loading-spinner texto="Cargando historial…" />
+  } @else if (reservas().length === 0) {
+    <app-empty-state
+      icono="🕘"
+      titulo="Aún no tienes rescates"
+      descripcion="Reserva un paquete en el feed y recógelo para que aparezca aquí."
+    />
+  } @else {
+    <div class="space-y-4">
+      @for (r of reservas(); track r.id) {
+        <article class="rounded-2xl border border-border bg-surface p-5 shadow-sm">
+          <div class="flex items-start justify-between gap-3">
+            <div>
+              <h3 class="text-lg font-bold text-text">{{ r.paqueteNombre ?? 'Paquete' }}</h3>
+              <p class="mt-0.5 text-sm text-text-muted">
+                {{ r.sucursalNombre ?? 'Sucursal' }}
+                @if (r.sucursalCiudad) {
+                  · {{ r.sucursalCiudad }}
+                }
+              </p>
+              @if (fechaCompletada(r)) {
+                <p class="mt-1 text-xs text-text-muted">Completado el {{ fechaCompletada(r) }}</p>
+              }
+            </div>
+            <span
+              class="shrink-0 rounded-full px-2.5 py-1 text-xs font-bold"
+              [class]="r.valorada ? 'bg-green-100 text-green-800' : 'bg-secondary-100 text-secondary-700'"
+            >
+              {{ r.valorada ? '✓ Valorado' : 'Sin valorar' }}
+            </span>
+          </div>
+
+          @if (r.valorada) {
+            <p class="mt-4 text-sm text-text-muted">
+              Gracias por tu valoración 🌟
+            </p>
+          } @else {
+            <div class="mt-4">
+              <app-valoracion-form [reservaId]="r.id" (valorada)="onValorada(r.id)" />
+            </div>
+          }
+        </article>
+      }
+    </div>
+  }
+</div>

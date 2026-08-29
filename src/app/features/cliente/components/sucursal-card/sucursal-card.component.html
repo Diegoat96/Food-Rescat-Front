@@ -1,0 +1,26 @@
+<article
+  class="relative flex w-56 shrink-0 items-start gap-3 rounded-2xl border border-border bg-surface p-4 shadow-sm transition-shadow hover:shadow-md"
+>
+  <div
+    class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-primary-100 text-sm font-extrabold text-primary-700"
+  >
+    {{ iniciales() }}
+  </div>
+
+  <div class="min-w-0 flex-1">
+    <h3 class="truncate text-sm font-bold text-text">{{ sucursal.nombre }}</h3>
+    <p class="mt-0.5 line-clamp-2 text-xs text-text-muted">{{ sucursal.direccion }}</p>
+    <div class="mt-1.5 flex items-center gap-2 text-xs">
+      @if (sucursal.ciudad) {
+        <span class="text-text-muted">📍 {{ sucursal.ciudad }}</span>
+      }
+      @if (sucursal.rating != null) {
+        <span class="font-semibold text-text">⭐ {{ sucursal.rating.toFixed(1) }}</span>
+      }
+    </div>
+  </div>
+
+  <div class="absolute right-3 top-3">
+    <app-favorito-button [sucursalId]="sucursal.id" />
+  </div>
+</article>

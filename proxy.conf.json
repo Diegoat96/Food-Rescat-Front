@@ -1,0 +1,7 @@
+{
+  "/api": {
+    "target": "https://API_BACKEND_PENDIENTE",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

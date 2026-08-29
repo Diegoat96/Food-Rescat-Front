@@ -17,18 +17,34 @@
     <app-publicar-paquete-form variante="compacta" />
   </section>
 
-  <!-- Bloque "Hoy" (datos mock hasta Sprint 4) -->
+  <!-- KPIs conectados a GET /comercios/me/estadisticas/kpis -->
   <section class="rounded-2xl border border-border bg-surface p-5">
     <h3 class="mb-4 text-sm font-bold uppercase tracking-wide text-text-muted">Hoy</h3>
-    <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
-      @for (m of metricas; track m.label) {
-        <div class="rounded-xl bg-surface-alt p-4">
-          <div class="text-2xl">{{ m.icon }}</div>
-          <p class="mt-2 text-2xl font-extrabold text-text">{{ m.valor }}</p>
-          <p class="text-sm text-text-muted">{{ m.label }}</p>
-        </div>
-      }
-    </div>
+
+    @if (cargandoKpis() && !kpis()) {
+      <app-loading-spinner texto="Cargando indicadores…" />
+    } @else if (!kpis()) {
+      <div class="rounded-xl bg-error-light border border-error/20 p-4 text-center">
+        <p class="text-sm font-semibold text-error">No se pudieron cargar los indicadores.</p>
+        <button
+          type="button"
+          (click)="cargarKpis()"
+          class="mt-2 text-sm font-semibold text-primary-600 hover:text-primary-700"
+        >
+          Reintentar
+        </button>
+      </div>
+    } @else {
+      <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+        @for (m of metricas(); track m.label) {
+          <div class="rounded-xl bg-surface-alt p-4">
+            <div class="text-2xl">{{ m.icono }}</div>
+            <p class="mt-2 text-2xl font-extrabold text-text">{{ m.valor }}</p>
+            <p class="text-sm text-text-muted">{{ m.label }}</p>
+          </div>
+        }
+      </div>
+    }
   </section>
 
   <!-- Últimas publicaciones (mock) -->
