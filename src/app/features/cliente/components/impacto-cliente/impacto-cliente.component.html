@@ -13,7 +13,7 @@
   </p>
 
   <div class="mt-6 grid grid-cols-3 gap-4">
-    @for (d of datos; track d.label) {
+    @for (d of datos(); track d.label) {
       <div class="rounded-xl bg-white/10 p-3 text-center">
         <p class="text-xl font-extrabold lg:text-2xl">{{ d.valor }}</p>
         <p class="mt-0.5 text-xs text-primary-100">{{ d.label }}</p>

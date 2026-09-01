@@ -12,8 +12,7 @@ export const routes: Routes = [
     path: 'cliente',
     canActivate: [authGuard, roleGuard],
     data: { expectedRole: Rol.CLIENTE },
-    loadComponent: () =>
-      import('./features/cliente/pages/feed/feed.component').then((m) => m.FeedComponent),
+    loadChildren: () => import('./features/cliente/cliente.routes').then((m) => m.CLIENTE_ROUTES),
   },
   {
     path: 'comercio',
@@ -27,7 +26,9 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     data: { expectedRole: Rol.ADMIN },
     loadComponent: () =>
-      import('./features/admin/pages/home/home.component').then((m) => m.AdminHomeComponent),
+      import('./features/admin/pages/dashboard/dashboard.component').then(
+        (m) => m.AdminDashboardComponent,
+      ),
   },
   { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
   { path: '**', redirectTo: 'auth/login' },

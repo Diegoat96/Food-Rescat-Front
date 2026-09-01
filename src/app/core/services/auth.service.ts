@@ -73,7 +73,7 @@ export class AuthService {
         this.router.navigate(['/comercio/inicio']);
         break;
       case Rol.ADMIN:
-        this.router.navigate(['/admin/home']);
+        this.router.navigate(['/admin']);
         break;
       default:
         this.router.navigate(['/auth/login']);

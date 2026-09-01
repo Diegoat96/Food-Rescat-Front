@@ -27,15 +27,13 @@
   }
 
   @if (cargando()) {
-    <p class="text-sm text-text-muted">Cargando sucursales…</p>
+    <app-loading-spinner texto="Cargando sucursales…" />
   } @else if (sucursales().length === 0) {
-    <div class="rounded-2xl border border-dashed border-border bg-surface p-10 text-center">
-      <div class="text-4xl">🏪</div>
-      <h3 class="mt-3 text-lg font-bold text-text">Aún no tienes sucursales</h3>
-      <p class="mt-1 text-sm text-text-muted">
-        Crea tu primera sucursal para empezar a publicar alimentos.
-      </p>
-    </div>
+    <app-empty-state
+      icono="🏪"
+      titulo="Aún no tienes sucursales"
+      descripcion="Crea tu primera sucursal para empezar a publicar alimentos."
+    />
   } @else {
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       @for (s of sucursales(); track s.id) {

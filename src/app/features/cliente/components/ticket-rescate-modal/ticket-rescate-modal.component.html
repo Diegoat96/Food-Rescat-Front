@@ -1,0 +1,69 @@
+<div
+  class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+  (mousedown)="onBackdrop($event)"
+>
+  <div class="w-full max-w-sm rounded-2xl bg-surface p-6 shadow-2xl">
+    <div class="flex items-start justify-between">
+      <div>
+        <h2 class="text-xl font-extrabold text-text">¡Rescate confirmado!</h2>
+        <p class="mt-0.5 text-sm text-text-muted">
+          Presenta este código en la sucursal para recoger tu paquete.
+        </p>
+      </div>
+      <button
+        type="button"
+        (click)="cerrar.emit()"
+        class="flex h-8 w-8 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-surface-alt hover:text-text"
+        aria-label="Cerrar"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- QR real generado a partir del código de verificación -->
+    <div class="mt-5 flex justify-center rounded-2xl border border-border bg-surface-alt p-5">
+      <qrcode
+        [qrdata]="reserva.codigoVerificacion"
+        [width]="160"
+        [colorDark]="'#1e293b'"
+        [elementType]="'canvas'"
+        [ariaLabel]="'Código QR de verificación'"
+      />
+    </div>
+
+    <!-- Código en DM Mono (sección 2.1 arquitectura) -->
+    <div class="mt-5 rounded-xl bg-primary-50 p-4 text-center">
+      <p class="text-[10px] font-semibold uppercase tracking-widest text-primary-700">
+        Código de verificación
+      </p>
+      <p class="mt-1 font-mono text-3xl font-medium tracking-widest text-primary-800">
+        {{ reserva.codigoVerificacion }}
+      </p>
+    </div>
+
+    <div class="mt-5 space-y-3 border-t border-border pt-4">
+      <div class="flex items-center justify-between">
+        <span class="text-sm text-text-muted">Paquete</span>
+        <span class="text-sm font-semibold text-text">{{ reserva.paqueteNombre }}</span>
+      </div>
+      <div class="flex items-center justify-between">
+        <span class="text-sm text-text-muted">Sucursal</span>
+        <span class="text-sm font-semibold text-text">
+          {{ reserva.sucursalNombre ?? 'Food Rescat' }}
+        </span>
+      </div>
+      <div class="flex items-center justify-between">
+        <span class="text-sm text-text-muted">Recoge antes de</span>
+        <span class="text-sm font-semibold text-text">{{ horaLimite() }}</span>
+      </div>
+    </div>
+
+    <button
+      type="button"
+      (click)="cerrar.emit()"
+      class="mt-6 w-full rounded-lg bg-primary-600 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-primary-700"
+    >
+      Entendido
+    </button>
+  </div>
+</div>

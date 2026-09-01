@@ -2,11 +2,13 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { SucursalesService } from '../../../../core/services/sucursales.service';
 import { Sucursal, SucursalRequest } from '../../../../core/models/sucursal.model';
 import { SucursalFormComponent } from './sucursal-form.component';
+import { LoadingSpinnerComponent } from '../../../../core/components/loading-spinner/loading-spinner.component';
+import { EmptyStateComponent } from '../../../../core/components/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-sucursales',
   standalone: true,
-  imports: [SucursalFormComponent],
+  imports: [SucursalFormComponent, LoadingSpinnerComponent, EmptyStateComponent],
   templateUrl: './sucursales.component.html',
   styleUrl: './sucursales.component.css',
 })

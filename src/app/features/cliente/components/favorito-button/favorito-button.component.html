@@ -1,0 +1,11 @@
+<button
+  type="button"
+  (click)="toggle()"
+  [attr.aria-pressed]="favorito()"
+  [aria-label]="favorito() ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+  class="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-lg shadow-sm transition-colors"
+  [class.text-error]="favorito()"
+  [class.text-text-muted]="!favorito()"
+>
+  {{ favorito() ? '❤️' : '🤍' }}
+</button>

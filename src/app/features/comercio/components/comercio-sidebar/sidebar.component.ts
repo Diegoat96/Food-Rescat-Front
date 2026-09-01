@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { SucursalesService } from '../../../../core/services/sucursales.service';
+import { EstadisticasHoyComponent } from '../estadisticas-hoy/estadisticas-hoy.component';
 
 @Component({
   selector: 'app-comercio-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, EstadisticasHoyComponent],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.css',
 })

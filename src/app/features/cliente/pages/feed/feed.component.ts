@@ -1,14 +1,29 @@
 import { Component, DestroyRef, computed, effect, inject, signal } from '@angular/core';
 import { PaquetesService } from '../../../../core/services/paquetes.service';
-import { Paquete } from '../../../../core/models/paquete.model';
+import { Reserva } from '../../../../core/models/reserva.model';
 import { ImpactoClienteComponent } from '../../components/impacto-cliente/impacto-cliente.component';
 import { FiltroCategoriasComponent } from '../../components/filtro-categorias/filtro-categorias.component';
 import { PaqueteCardComponent } from '../../components/paquete-card/paquete-card.component';
+import { TicketRescateModalComponent } from '../../components/ticket-rescate-modal/ticket-rescate-modal.component';
+import {
+  SucursalCardComponent,
+  SucursalCardData,
+} from '../../components/sucursal-card/sucursal-card.component';
+import { LoadingSpinnerComponent } from '../../../../core/components/loading-spinner/loading-spinner.component';
+import { EmptyStateComponent } from '../../../../core/components/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-feed',
   standalone: true,
-  imports: [ImpactoClienteComponent, FiltroCategoriasComponent, PaqueteCardComponent],
+  imports: [
+    ImpactoClienteComponent,
+    FiltroCategoriasComponent,
+    PaqueteCardComponent,
+    TicketRescateModalComponent,
+    SucursalCardComponent,
+    LoadingSpinnerComponent,
+    EmptyStateComponent,
+  ],
   templateUrl: './feed.component.html',
   styleUrl: './feed.component.css',
 })
@@ -21,7 +36,7 @@ export class FeedComponent {
 
   readonly busqueda = signal('');
   readonly seleccionCategoria = signal('Todo');
-  readonly mensajeReserva = signal<string | null>(null);
+  readonly ticket = signal<Reserva | null>(null);
 
   readonly paquetesFiltrados = computed(() => {
     const texto = this.busqueda().trim().toLowerCase();
@@ -33,6 +48,22 @@ export class FeedComponent {
         texto === '' || `${p.nombre} ${p.sucursal?.nombre ?? ''}`.toLowerCase().includes(texto);
       return matchCat && matchTexto;
     });
+  });
+
+  readonly sucursales = computed<SucursalCardData[]>(() => {
+    const vistas = new Map<string, SucursalCardData>();
+    for (const p of this.paquetesFiltrados()) {
+      const s = p.sucursal;
+      if (s?.id && !vistas.has(s.id)) {
+        vistas.set(s.id, {
+          id: s.id,
+          nombre: s.nombre,
+          direccion: s.direccion,
+          ciudad: s.ciudad,
+        });
+      }
+    }
+    return [...vistas.values()];
   });
 
   constructor() {
@@ -53,11 +84,12 @@ export class FeedComponent {
     this.busqueda.set((event.target as HTMLInputElement).value);
   }
 
-  reservar(paquete: Paquete): void {
-    const hora = new Date(paquete.horaLimiteRecogida).toLocaleTimeString('es-GT', {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-    this.mensajeReserva.set(`Solicitaste "${paquete.nombre}". Recógelo antes de las ${hora}.`);
+  onReservaExitosa(reserva: Reserva): void {
+    this.ticket.set(reserva);
+  }
+
+  cerrarTicket(): void {
+    this.ticket.set(null);
+    this.paquetesService.cargar().subscribe();
   }
 }
