@@ -1,0 +1,24 @@
+<div class="px-4">
+  <div class="rounded-xl border border-border bg-surface-alt p-3">
+    <p class="text-[10px] font-semibold uppercase tracking-wide text-text-muted">Hoy</p>
+
+    @if (cargando() && !datos()) {
+      <app-loading-spinner texto="Cargando…" [compacto]="true" />
+    } @else {
+      <div class="mt-2 space-y-1.5">
+        <div class="flex items-center justify-between">
+          <span class="text-xs text-text-muted">🥦 Kg rescatados</span>
+          <span class="text-xs font-bold text-text">{{ kgFormateado() }}</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs text-text-muted">✅ Pedidos completados</span>
+          <span class="text-xs font-bold text-text">{{ datos()?.pedidosCompletadosHoy ?? 0 }}</span>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs text-text-muted">💰 Ingresos</span>
+          <span class="text-xs font-bold text-text">{{ ingresosFormateado() }}</span>
+        </div>
+      </div>
+    }
+  </div>
+</div>

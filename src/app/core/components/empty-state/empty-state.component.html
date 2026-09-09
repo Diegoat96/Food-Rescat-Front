@@ -1,0 +1,13 @@
+<div
+  class="rounded-2xl border border-dashed border-border bg-surface text-center"
+  [class.p-10]="!compacto()"
+  [class.p-6]="compacto()"
+>
+  <div class="text-4xl" [class.text-3xl]="compacto()">{{ icono() }}</div>
+  <h3 class="mt-2 font-bold text-text" [class.text-lg]="!compacto()" [class.text-sm]="compacto()">
+    {{ titulo() }}
+  </h3>
+  @if (descripcion()) {
+    <p class="mt-1 text-sm text-text-muted">{{ descripcion() }}</p>
+  }
+</div>

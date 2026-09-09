@@ -1,0 +1,7 @@
+export enum EstadoPaquete {
+  AVAILABLE = 'AVAILABLE',
+  RESERVED = 'RESERVED',
+  PICKED_UP = 'PICKED_UP',
+  EXPIRED = 'EXPIRED',
+  CANCELLED = 'CANCELLED',
+}

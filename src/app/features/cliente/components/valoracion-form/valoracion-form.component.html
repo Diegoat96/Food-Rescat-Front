@@ -1,0 +1,66 @@
+<div class="rounded-xl border border-border bg-surface-alt p-4">
+  <p class="text-sm font-bold text-text">¿Cómo estuvo tu rescate?</p>
+
+  <div class="mt-3 flex items-center gap-1">
+    @for (estrella of estrellas; track estrella) {
+      <button
+        type="button"
+        (click)="seleccionar(estrella)"
+        [attr.aria-label]="estrella + ' estrellas'"
+        class="text-2xl transition-transform hover:scale-110"
+        [class.text-amber-400]="puntuacion() >= estrella"
+        [class.text-border]="puntuacion() < estrella"
+      >
+        ★
+      </button>
+    }
+    <span class="ml-2 text-sm text-text-muted">
+      @if (puntuacion() > 0) {
+        {{ puntuacion() }}/5
+      } @else {
+        Sin calificar
+      }
+    </span>
+  </div>
+
+  <textarea
+    (input)="onComentario($event)"
+    rows="3"
+    placeholder="Cuéntanos cómo fue tu experiencia… (opcional)"
+    class="mt-3 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20"
+  ></textarea>
+
+  @if (error()) {
+    <p class="mt-2 text-sm font-semibold text-error">{{ error() }}</p>
+  }
+
+  <button
+    type="button"
+    (click)="enviar()"
+    [disabled]="guardando()"
+    class="mt-3 rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-60"
+  >
+    @if (guardando()) {
+      <span class="inline-flex items-center gap-2">
+        <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+          <circle
+            class="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            stroke-width="4"
+          />
+          <path
+            class="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+          />
+        </svg>
+        Guardando…
+      </span>
+    } @else {
+      Enviar valoración
+    }
+  </button>
+</div>

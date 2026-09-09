@@ -1,0 +1,53 @@
+<section class="rounded-2xl border border-border bg-surface">
+  <div class="border-b border-border px-5 py-4">
+    <h3 class="text-sm font-bold uppercase tracking-wide text-text-muted">Entregas pendientes</h3>
+  </div>
+
+  @if (cargando() && pendientes().length === 0) {
+    <app-loading-spinner texto="Cargando pedidos…" />
+  } @else if (pendientes().length === 0) {
+    <app-empty-state
+      icono="🎉"
+      titulo="No hay pedidos pendientes"
+      descripcion="Cuando un cliente reserve, aparecerá aquí."
+    />
+  } @else {
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm">
+        <thead>
+          <tr class="border-b border-border text-xs uppercase tracking-wide text-text-muted">
+            <th class="px-5 py-3 font-semibold">ID Pedido</th>
+            <th class="px-5 py-3 font-semibold">Cliente</th>
+            <th class="px-5 py-3 font-semibold">Paquete</th>
+            <th class="px-5 py-3 font-semibold">Hora de Recogida</th>
+            <th class="px-5 py-3 font-semibold">Código</th>
+            <th class="px-5 py-3 font-semibold">Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of pendientes(); track r.id) {
+            <tr class="border-b border-border last:border-0">
+              <td class="px-5 py-3 font-mono text-xs text-text-muted">{{ idCorto(r) }}</td>
+              <td class="px-5 py-3 font-semibold text-text">{{ r.clientName ?? 'Cliente' }}</td>
+              <td class="px-5 py-3 text-text">{{ r.packageName ?? 'Paquete' }}</td>
+              <td class="px-5 py-3 text-text">{{ horaRecogida(r) }}</td>
+              <td class="px-5 py-3">
+                <span class="font-mono text-sm font-medium tracking-wider text-primary-700">
+                  {{ r.verificationCode }}
+                </span>
+              </td>
+              <td class="px-5 py-3">
+                <span
+                  class="inline-flex rounded-full px-2.5 py-1 text-xs font-bold"
+                  [class]="badge(r).bag"
+                >
+                  {{ badge(r).texto }}
+                </span>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</section>
