@@ -14,10 +14,10 @@ export const roleGuard: CanActivateFn = (route) => {
     return router.createUrlTree(['/auth/login']);
   }
 
-  if (!expectedRole || user.rol === expectedRole) {
+  if (!expectedRole || user.role === expectedRole) {
     return true;
   }
 
-  authService.redirectByRole(user.rol);
+  authService.redirectByRole(user.role);
   return false;
 };

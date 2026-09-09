@@ -11,13 +11,13 @@ export const routes: Routes = [
   {
     path: 'cliente',
     canActivate: [authGuard, roleGuard],
-    data: { expectedRole: Rol.CLIENTE },
+    data: { expectedRole: Rol.CLIENT },
     loadChildren: () => import('./features/cliente/cliente.routes').then((m) => m.CLIENTE_ROUTES),
   },
   {
     path: 'comercio',
     canActivate: [authGuard, roleGuard],
-    data: { expectedRole: Rol.COMERCIO },
+    data: { expectedRole: Rol.BUSINESS },
     loadChildren: () =>
       import('./features/comercio/comercio.routes').then((m) => m.COMERCIO_ROUTES),
   },

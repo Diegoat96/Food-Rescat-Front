@@ -15,7 +15,7 @@ export class EstadisticasService {
 
   cargarHoy(): Observable<EstadisticasHoy> {
     this.cargando.set(true);
-    return this.api.get<EstadisticasHoy>('/comercios/me/estadisticas/hoy').pipe(
+    return this.api.get<EstadisticasHoy>('/businesses/me/stats/today').pipe(
       tap((data) => {
         this.estadisticasHoy.set(data);
         this.cargando.set(false);
@@ -25,7 +25,7 @@ export class EstadisticasService {
 
   cargarKpis(): Observable<EstadisticasKpis> {
     this.cargandoKpis.set(true);
-    return this.api.get<EstadisticasKpis>('/comercios/me/estadisticas/kpis').pipe(
+    return this.api.get<EstadisticasKpis>('/merchants/me/statistics/kpis').pipe(
       tap((data) => {
         this.kpis.set(data);
         this.cargandoKpis.set(false);

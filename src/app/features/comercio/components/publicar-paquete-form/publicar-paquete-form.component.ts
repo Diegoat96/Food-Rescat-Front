@@ -22,32 +22,23 @@ export class PublicarPaqueteFormComponent {
 
   @Input() variante: 'compacta' | 'grande' = 'grande';
 
-  readonly esDonacion = signal(false);
   readonly guardando = signal(false);
   readonly publicado = signal(false);
   readonly sucursales = this.sucursalesService.sucursales;
 
   readonly horarios = [
-    '12:00',
-    '13:00',
-    '14:00',
-    '15:00',
-    '16:00',
-    '17:00',
-    '18:00',
-    '19:00',
-    '20:00',
-    '21:00',
-    '22:00',
+    '12:00', '13:00', '14:00', '15:00', '16:00',
+    '17:00', '18:00', '19:00', '20:00', '21:00', '22:00',
   ];
 
   readonly form: FormGroup = this.fb.group({
-    producto: ['', [Validators.required]],
-    categoriaId: ['', [Validators.required]],
-    cantidadStock: [1, [Validators.required, Validators.min(1)]],
-    horaLimiteRecogida: ['', [Validators.required]],
-    precioOriginal: [''],
-    precioDescuento: [''],
+    name: ['', [Validators.required]],
+    description: [''],
+    categoryId: ['', [Validators.required]],
+    quantity: [1, [Validators.required, Validators.min(1)]],
+    pickupDeadline: ['', [Validators.required]],
+    originalPrice: [''],
+    discountedPrice: [''],
   });
 
   private readonly formValues = toSignal(this.form.valueChanges, {
@@ -60,24 +51,17 @@ export class PublicarPaqueteFormComponent {
   }
 
   readonly preview = computed(() => {
-    if (this.esDonacion()) {
-      return 'El cliente lo recibe gratis como donación.';
-    }
     const valores = this.formValues();
-    const original = Number(valores?.precioOriginal);
-    const descuento = Number(valores?.precioDescuento);
+    const original = Number(valores?.originalPrice);
+    const descuento = Number(valores?.discountedPrice);
     if (Number.isFinite(original) && Number.isFinite(descuento) && original > 0 && descuento > 0) {
       return `El cliente paga Q${descuento} en lugar de Q${original}`;
     }
     return 'Ingresa los precios para ver el descuento en vivo.';
   });
 
-  toggleDonacion(): void {
-    this.esDonacion.update((v) => !v);
-  }
-
   ajustarStock(delta: number): void {
-    const control = this.form.get('cantidadStock');
+    const control = this.form.get('quantity');
     const actual = Number(control?.value) || 0;
     control?.setValue(Math.max(1, actual + delta));
     control?.markAsTouched();
@@ -97,19 +81,19 @@ export class PublicarPaqueteFormComponent {
     if (!sucursal) {
       return;
     }
-    const donacion = this.esDonacion();
-    const original = Number(this.form.get('precioOriginal')?.value) || 0;
-    const descuento = Number(this.form.get('precioDescuento')?.value) || 0;
+    const original = Number(this.form.get('originalPrice')?.value) || 0;
+    const descuento = Number(this.form.get('discountedPrice')?.value) || 0;
 
     const data: PaqueteRequest = {
-      producto: this.form.get('producto')?.value,
-      categoriaId: this.form.get('categoriaId')?.value,
-      sucursalId: sucursal.id,
-      cantidadStock: Number(this.form.get('cantidadStock')?.value),
-      horaLimiteRecogida: this.horaRecogida(this.form.get('horaLimiteRecogida')?.value),
-      esDonacion: donacion,
-      pesoEstimadoKg: 0,
-      ...(donacion ? {} : { precioOriginal: original, precioDescuento: descuento }),
+      name: this.form.get('name')?.value,
+      description: this.form.get('description')?.value || undefined,
+      categoryId: this.form.get('categoryId')?.value,
+      branchId: sucursal.id,
+      quantity: Number(this.form.get('quantity')?.value),
+      pickupDeadline: this.horaRecogida(this.form.get('pickupDeadline')?.value),
+      estimatedWeightKg: 0,
+      ...(original > 0 ? { originalPrice: original } : {}),
+      ...(descuento > 0 ? { discountedPrice: descuento } : {}),
     };
 
     this.guardando.set(true);
@@ -117,8 +101,7 @@ export class PublicarPaqueteFormComponent {
       next: () => {
         this.guardando.set(false);
         this.publicado.set(true);
-        this.form.reset({ cantidadStock: 1, horaLimiteRecogida: '' });
-        this.esDonacion.set(false);
+        this.form.reset({ quantity: 1, pickupDeadline: '' });
       },
       error: () => {
         this.guardando.set(false);

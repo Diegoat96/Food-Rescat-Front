@@ -13,7 +13,7 @@ export class FavoritosService {
 
   cargar(): Observable<Favorito[]> {
     this.cargando.set(true);
-    return this.api.get<Favorito[]>('/favoritos').pipe(
+    return this.api.get<Favorito[]>('/favorites').pipe(
       tap((lista) => {
         this.favoritos.set(lista);
         this.cargando.set(false);
@@ -21,28 +21,28 @@ export class FavoritosService {
     );
   }
 
-  esFavorito(sucursalId: string | null | undefined): boolean {
-    if (!sucursalId) {
+  esFavorito(branchId: string | null | undefined): boolean {
+    if (!branchId) {
       return false;
     }
-    return this.favoritos().some((f) => (f.sucursal?.id ?? f.id) === sucursalId);
+    return this.favoritos().some((f) => (f.branch?.id ?? f.id) === branchId);
   }
 
-  toggle(sucursalId: string): Observable<unknown> {
-    if (this.esFavorito(sucursalId)) {
-      return this.api.delete(`/favoritos/${sucursalId}`).pipe(
+  toggle(branchId: string): Observable<unknown> {
+    if (this.esFavorito(branchId)) {
+      return this.api.delete(`/favorites/${branchId}`).pipe(
         tap(() => {
           this.favoritos.update((lista) =>
-            lista.filter((f) => (f.sucursal?.id ?? f.id) !== sucursalId),
+            lista.filter((f) => (f.branch?.id ?? f.id) !== branchId),
           );
         }),
       );
     }
-    return this.api.post<Favorito>(`/favoritos/${sucursalId}`, {}).pipe(
+    return this.api.post<Favorito>(`/favorites/${branchId}`, {}).pipe(
       tap((favorito) => {
-        const nuevo: Favorito = favorito?.sucursal
+        const nuevo: Favorito = favorito?.branch
           ? favorito
-          : { id: favorito?.id ?? sucursalId, sucursal: { id: sucursalId } as Sucursal };
+          : { id: favorito?.id ?? branchId, branch: { id: branchId } as Sucursal };
         this.favoritos.update((lista) => [...lista, nuevo]);
       }),
     );

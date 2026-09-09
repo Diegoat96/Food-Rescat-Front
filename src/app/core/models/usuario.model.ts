@@ -2,8 +2,9 @@ import { Rol } from './rol.enum';
 
 export interface Usuario {
   id: string;
-  nombre: string;
+  name: string;
   email: string;
-  rol: Rol;
-  activo?: boolean;
+  phone?: string;
+  role: Rol;
+  isActive?: boolean;
 }

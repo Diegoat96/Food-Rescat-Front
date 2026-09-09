@@ -1,7 +1,7 @@
 export interface Notificacion {
   id: string;
-  tipo: string;
-  mensaje: string;
-  leido: boolean;
+  type: string;
+  message: string;
+  read: boolean;
   createdAt: string;
 }

@@ -2,8 +2,10 @@ import { Usuario } from './usuario.model';
 
 export interface AuthResponse {
   accessToken: string;
-  usuario: Usuario;
+  user: Usuario;
 }
+
+export type RegisterResponse = Usuario;
 
 export interface LoginRequest {
   email: string;
@@ -11,8 +13,8 @@ export interface LoginRequest {
 }
 
 export interface RegisterRequest {
-  nombre: string;
+  name: string;
   email: string;
   password: string;
-  rol: string;
+  phone?: string;
 }

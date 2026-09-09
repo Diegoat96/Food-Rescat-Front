@@ -16,12 +16,11 @@ export function usuarioUnico(prefijo: string): CredencialesUsuario {
   };
 }
 
-export async function registrar(page: Page, usuario: CredencialesUsuario, rol: string): Promise<void> {
+export async function registrar(page: Page, usuario: CredencialesUsuario): Promise<void> {
   await page.goto('/auth/register');
   await page.getByLabel('Nombre completo').fill(usuario.nombre);
   await page.getByLabel('Correo electrónico').fill(usuario.email);
   await page.getByLabel('Contraseña').fill(usuario.password);
-  await page.getByLabel('Tipo de cuenta').selectOption(rol);
   await page.getByRole('button', { name: 'Crear Cuenta' }).click();
 }
 

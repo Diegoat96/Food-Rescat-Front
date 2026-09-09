@@ -1,83 +1,68 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
   <div>
-    <label for="nombreSucursal" class="mb-1 block text-sm font-medium text-text">
-      Nombre de sucursal
+    <label for="name" class="mb-1 block text-sm font-medium text-text">
+      Nombre
     </label>
     <input
-      id="nombreSucursal"
+      id="name"
       type="text"
-      formControlName="nombreSucursal"
+      formControlName="name"
       placeholder="Ej: Sucursal Centro"
       class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
-      [class.border-error]="isFieldInvalid('nombreSucursal')"
+      [class.border-error]="isFieldInvalid('name')"
     />
-    @if (isFieldInvalid('nombreSucursal')) {
+    @if (isFieldInvalid('name')) {
       <p class="mt-1 text-sm text-error">El nombre es obligatorio.</p>
     }
   </div>
 
   <div>
-    <label for="direccion" class="mb-1 block text-sm font-medium text-text"> Dirección </label>
+    <label for="address" class="mb-1 block text-sm font-medium text-text"> Dirección </label>
     <input
-      id="direccion"
+      id="address"
       type="text"
-      formControlName="direccion"
+      formControlName="address"
       placeholder="Ej: Av. Libertador 1234"
       class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
-      [class.border-error]="isFieldInvalid('direccion')"
+      [class.border-error]="isFieldInvalid('address')"
     />
-    @if (isFieldInvalid('direccion')) {
+    @if (isFieldInvalid('address')) {
       <p class="mt-1 text-sm text-error">La dirección es obligatoria.</p>
     }
   </div>
 
+  <div>
+    <label for="city" class="mb-1 block text-sm font-medium text-text"> Ciudad </label>
+    <input
+      id="city"
+      type="text"
+      formControlName="city"
+      placeholder="Ej: Guatemala"
+      class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+    />
+  </div>
+
   <div class="grid grid-cols-2 gap-4">
     <div>
-      <label for="latitud" class="mb-1 block text-sm font-medium text-text"> Latitud </label>
+      <label for="phone" class="mb-1 block text-sm font-medium text-text"> Teléfono </label>
       <input
-        id="latitud"
-        type="number"
-        step="any"
-        formControlName="latitud"
-        placeholder="-90 a 90"
+        id="phone"
+        type="tel"
+        formControlName="phone"
+        placeholder="+502 5555 5555"
         class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
-        [class.border-error]="isFieldInvalid('latitud')"
       />
-      @if (isFieldInvalid('latitud')) {
-        <p class="mt-1 text-sm text-error">
-          @if (form.get('latitud')?.errors?.['required']) {
-            La latitud es obligatoria.
-          } @else if (form.get('latitud')?.errors?.['noNumerico']) {
-            Debe ser un número.
-          } @else if (form.get('latitud')?.errors?.['fueraRango']) {
-            Debe estar entre -90 y 90.
-          }
-        </p>
-      }
     </div>
 
     <div>
-      <label for="longitud" class="mb-1 block text-sm font-medium text-text"> Longitud </label>
+      <label for="openingHours" class="mb-1 block text-sm font-medium text-text"> Horario </label>
       <input
-        id="longitud"
-        type="number"
-        step="any"
-        formControlName="longitud"
-        placeholder="-180 a 180"
+        id="openingHours"
+        type="text"
+        formControlName="openingHours"
+        placeholder="Lun-Sáb 08:00-18:00"
         class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
-        [class.border-error]="isFieldInvalid('longitud')"
       />
-      @if (isFieldInvalid('longitud')) {
-        <p class="mt-1 text-sm text-error">
-          @if (form.get('longitud')?.errors?.['required']) {
-            La longitud es obligatoria.
-          } @else if (form.get('longitud')?.errors?.['noNumerico']) {
-            Debe ser un número.
-          } @else if (form.get('longitud')?.errors?.['fueraRango']) {
-            Debe estar entre -180 y 180.
-          }
-        </p>
-      }
     </div>
   </div>
 

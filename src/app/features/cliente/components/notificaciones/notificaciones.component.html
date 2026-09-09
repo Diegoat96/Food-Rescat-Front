@@ -41,19 +41,19 @@
               type="button"
               (click)="marcarLeida(n.id)"
               class="flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-alt"
-              [class.bg-primary-50/60]="!n.leido"
+              [class.bg-primary-50/60]="!n.read"
             >
-              <span class="mt-0.5 text-base">{{ n.leido ? '🔔' : '⚪' }}</span>
+              <span class="mt-0.5 text-base">{{ n.read ? '🔔' : '⚪' }}</span>
               <span class="flex-1">
                 <p
                   class="text-sm text-text"
-                  [class.font-semibold]="!n.leido"
+                  [class.font-semibold]="!n.read"
                 >
-                  {{ n.mensaje }}
+                  {{ n.message }}
                 </p>
                 <p class="mt-0.5 text-xs text-text-muted">{{ fecha(n.createdAt) }}</p>
               </span>
-              @if (!n.leido) {
+              @if (!n.read) {
                 <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary-500"></span>
               }
             </button>

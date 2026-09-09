@@ -8,11 +8,11 @@
   </div>
 
   <div class="min-w-0 flex-1">
-    <h3 class="truncate text-sm font-bold text-text">{{ sucursal.nombre }}</h3>
-    <p class="mt-0.5 line-clamp-2 text-xs text-text-muted">{{ sucursal.direccion }}</p>
+    <h3 class="truncate text-sm font-bold text-text">{{ sucursal.name }}</h3>
+    <p class="mt-0.5 line-clamp-2 text-xs text-text-muted">{{ sucursal.address }}</p>
     <div class="mt-1.5 flex items-center gap-2 text-xs">
-      @if (sucursal.ciudad) {
-        <span class="text-text-muted">📍 {{ sucursal.ciudad }}</span>
+      @if (sucursal.city) {
+        <span class="text-text-muted">📍 {{ sucursal.city }}</span>
       }
       @if (sucursal.rating != null) {
         <span class="font-semibold text-text">⭐ {{ sucursal.rating.toFixed(1) }}</span>
@@ -21,6 +21,6 @@
   </div>
 
   <div class="absolute right-3 top-3">
-    <app-favorito-button [sucursalId]="sucursal.id" />
+    <app-favorito-button [branchId]="sucursal.id" />
   </div>
 </article>

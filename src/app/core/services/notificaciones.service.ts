@@ -9,14 +9,14 @@ export class NotificacionesService {
   readonly cargando = signal(false);
 
   readonly noLeidas = computed(
-    () => this.notificaciones().filter((n) => !n.leido).length,
+    () => this.notificaciones().filter((n) => !n.read).length,
   );
 
   constructor(private api: ApiService) {}
 
   cargar(): Observable<Notificacion[]> {
     this.cargando.set(true);
-    return this.api.get<Notificacion[]>('/notificaciones').pipe(
+    return this.api.get<Notificacion[]>('/notifications').pipe(
       tap((lista) => {
         this.notificaciones.set(lista);
         this.cargando.set(false);
@@ -25,10 +25,10 @@ export class NotificacionesService {
   }
 
   marcarLeida(id: string): Observable<Notificacion> {
-    return this.api.patch<Notificacion>(`/notificaciones/${id}/leido`, {}).pipe(
-      tap((actualizada) => {
+    return this.api.patch<Notificacion>(`/notifications/${id}/read`, {}).pipe(
+      tap(() => {
         this.notificaciones.update((lista) =>
-          lista.map((n) => (n.id === id ? { ...n, leido: true } : n)),
+          lista.map((n) => (n.id === id ? { ...n, read: true } : n)),
         );
       }),
     );

@@ -10,7 +10,7 @@ export class CategoriasService {
   constructor(private api: ApiService) {}
 
   cargar(): Observable<Categoria[]> {
-    return this.api.get<Categoria[]>('/categorias').pipe(
+    return this.api.get<Categoria[]>('/categories').pipe(
       tap((lista) => {
         this.categorias.set(lista);
       }),

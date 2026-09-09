@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
-import { Rol } from '../../../../core/models/rol.enum';
-import { AuthResponse } from '../../../../core/models/auth-response.model';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +16,6 @@ export class RegisterComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  Rol = Rol;
   registerForm: FormGroup;
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
@@ -28,7 +25,6 @@ export class RegisterComponent {
       nombre: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
-      rol: ['', Validators.required],
     });
   }
 
@@ -46,10 +42,15 @@ export class RegisterComponent {
     this.isLoading.set(true);
     this.errorMessage.set(null);
 
-    this.authService.register(this.registerForm.value).subscribe({
-      next: (res: AuthResponse) => {
+    const formValue = this.registerForm.value;
+    this.authService.register({
+      name: formValue.nombre,
+      email: formValue.email,
+      password: formValue.password,
+    }).subscribe({
+      next: () => {
         this.isLoading.set(false);
-        this.authService.redirectByRole(res.usuario.rol);
+        this.router.navigate(['/auth/login']);
       },
       error: (err: { status: number }) => {
         this.isLoading.set(false);

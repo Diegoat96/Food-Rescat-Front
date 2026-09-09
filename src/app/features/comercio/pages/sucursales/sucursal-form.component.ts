@@ -1,7 +1,6 @@
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Sucursal, SucursalRequest } from '../../../../core/models/sucursal.model';
-import { latitudValidator, longitudValidator } from './sucursal.validators';
 
 @Component({
   selector: 'app-sucursal-form',
@@ -17,17 +16,19 @@ export class SucursalFormComponent {
     this._sucursal = value;
     if (value) {
       this.form.patchValue({
-        nombreSucursal: value.nombreSucursal,
-        direccion: value.direccion,
-        latitud: value.latitud,
-        longitud: value.longitud,
+        name: value.name,
+        address: value.address,
+        city: value.city ?? '',
+        phone: value.phone ?? '',
+        openingHours: value.openingHours ?? '',
       });
     } else {
       this.form.reset({
-        nombreSucursal: '',
-        direccion: '',
-        latitud: '',
-        longitud: '',
+        name: '',
+        address: '',
+        city: '',
+        phone: '',
+        openingHours: '',
       });
     }
   }
@@ -39,10 +40,11 @@ export class SucursalFormComponent {
   private _sucursal: Sucursal | null = null;
 
   readonly form: FormGroup = this.fb.group({
-    nombreSucursal: ['', [Validators.required]],
-    direccion: ['', [Validators.required]],
-    latitud: ['', [Validators.required, latitudValidator]],
-    longitud: ['', [Validators.required, longitudValidator]],
+    name: ['', [Validators.required]],
+    address: ['', [Validators.required]],
+    city: [''],
+    phone: [''],
+    openingHours: [''],
   });
 
   get esEdicion(): boolean {

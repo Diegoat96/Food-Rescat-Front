@@ -8,7 +8,7 @@ import { ValoracionesService } from '../../../../core/services/valoraciones.serv
   styleUrl: './valoracion-form.component.css',
 })
 export class ValoracionFormComponent {
-  @Input({ required: true }) reservaId!: string;
+  @Input({ required: true }) reservationId!: string;
   @Output() valorada = new EventEmitter<void>();
 
   private valoracionesService = inject(ValoracionesService);
@@ -42,9 +42,9 @@ export class ValoracionFormComponent {
 
     this.valoracionesService
       .crear({
-        reservaId: this.reservaId,
-        puntuacion: this.puntuacion(),
-        comentario: this.comentario().trim() || undefined,
+        reservationId: this.reservationId,
+        score: this.puntuacion(),
+        comment: this.comentario().trim() || undefined,
       })
       .subscribe({
         next: () => {

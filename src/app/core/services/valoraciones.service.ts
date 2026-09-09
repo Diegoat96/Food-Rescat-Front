@@ -8,10 +8,11 @@ export class ValoracionesService {
   constructor(private api: ApiService) {}
 
   crear(data: ValoracionRequest): Observable<Valoracion> {
-    return this.api.post<Valoracion>('/valoraciones', data);
+    return this.api.post<Valoracion>('/ratings', data);
   }
 
-  obtenerDeReserva(reservaId: string): Observable<Valoracion> {
-    return this.api.get<Valoracion>(`/valoraciones/reserva/${reservaId}`);
+  // TODO: Endpoint GET /ratings/reserva/:id no confirmado en backend.
+  obtenerDeReserva(reservationId: string): Observable<Valoracion> {
+    return this.api.get<Valoracion>(`/ratings/reservation/${reservationId}`);
   }
 }

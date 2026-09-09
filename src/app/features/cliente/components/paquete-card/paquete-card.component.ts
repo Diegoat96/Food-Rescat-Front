@@ -20,6 +20,7 @@ export class PaqueteCardComponent {
 
   readonly reservando = signal(false);
   readonly errorReserva = signal<string | null>(null);
+  readonly metodoPago = signal<string>('CASH');
 
   onReservar(): void {
     if (this.reservando()) {
@@ -27,10 +28,18 @@ export class PaqueteCardComponent {
     }
     this.reservando.set(true);
     this.errorReserva.set(null);
-    this.reservasService.reservar(this.paquete.id).subscribe({
+    this.reservasService.reservar(this.paquete.id, this.metodoPago()).subscribe({
       next: (res) => {
         this.reservando.set(false);
-        this.reservaExitosa.emit(res.reserva ?? (res as unknown as Reserva));
+        const reservaCompuesta: Reserva = {
+          ...res,
+          packageName: this.paquete.name,
+          branchName: this.paquete.branch?.name,
+          branchCity: this.paquete.branch?.city,
+          branchAddress: this.paquete.branch?.address,
+          pickupDeadline: this.paquete.pickupDeadline,
+        };
+        this.reservaExitosa.emit(reservaCompuesta);
       },
       error: () => {
         this.reservando.set(false);
@@ -39,8 +48,12 @@ export class PaqueteCardComponent {
     });
   }
 
+  onMetodoPago(event: Event): void {
+    this.metodoPago.set((event.target as HTMLSelectElement).value);
+  }
+
   emoji(): string {
-    const nombre = this.paquete.categoria?.nombre?.toLowerCase() ?? '';
+    const nombre = this.paquete.category?.name?.toLowerCase() ?? '';
     if (nombre.includes('pan')) {
       return '🥖';
     }
@@ -57,7 +70,7 @@ export class PaqueteCardComponent {
   }
 
   horaLimite(): string {
-    const fecha = new Date(this.paquete.horaLimiteRecogida);
+    const fecha = new Date(this.paquete.pickupDeadline);
     if (Number.isNaN(fecha.getTime())) {
       return 'pronto';
     }

@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { ApiService } from './api.service';
-import { Reserva, ReservaResponse } from '../models/reserva.model';
+import { Reserva } from '../models/reserva.model';
 
 @Injectable({ providedIn: 'root' })
 export class ReservasService {
@@ -10,21 +10,21 @@ export class ReservasService {
 
   constructor(private api: ApiService) {}
 
-  reservar(paqueteId: string): Observable<ReservaResponse> {
-    return this.api.post<ReservaResponse>(`/paquetes/${paqueteId}/reservar`, {});
+  reservar(paqueteId: string, paymentMethod: string): Observable<Reserva> {
+    return this.api.post<Reserva>(`/packages/${paqueteId}/reserve`, { paymentMethod });
   }
 
-  verificar(codigoVerificacion: string): Observable<Reserva> {
-    return this.api.post<Reserva>('/reservas/verificar', { codigoVerificacion });
+  verificar(verificationCode: string): Observable<Reserva> {
+    return this.api.post<Reserva>('/reservations/verify', { verificationCode });
   }
 
   completar(reservaId: string): Observable<Reserva> {
-    return this.api.patch<Reserva>(`/reserva/${reservaId}/completar`, {});
+    return this.api.patch<Reserva>(`/reservations/${reservaId}/complete`, {});
   }
 
   cargarPendientes(): Observable<Reserva[]> {
     this.cargandoPendientes.set(true);
-    return this.api.get<Reserva[]>('/reservas/pendientes').pipe(
+    return this.api.get<Reserva[]>('/reservations/pending').pipe(
       tap((lista) => {
         this.pendientes.set(lista);
         this.cargandoPendientes.set(false);
@@ -32,7 +32,9 @@ export class ReservasService {
     );
   }
 
+  // NOTA: el backend real NO expone un endpoint de historial de reservas del cliente
+  // (verificado en /api/docs-json). No se inventa una ruta; se retorna vacío.
   misReservas(): Observable<Reserva[]> {
-    return this.api.get<Reserva[]>('/clientes/me/reservas');
+    return of([]);
   }
 }

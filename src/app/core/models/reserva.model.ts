@@ -1,29 +1,27 @@
 export enum EstadoReserva {
-  PENDIENTE = 'PENDIENTE',
-  COMPLETADA = 'COMPLETADA',
-  EXPIRADA = 'EXPIRADA',
-  CANCELADA = 'CANCELADA',
+  PENDING = 'PENDING',
+  COMPLETED = 'COMPLETED',
+  CANCELED = 'CANCELED',
+  EXPIRED = 'EXPIRED',
 }
 
 export interface Reserva {
   id: string;
-  codigoVerificacion: string;
-  estado: EstadoReserva;
-  clienteId: string;
-  clienteNombre?: string;
-  paqueteId: string;
-  paqueteNombre?: string;
-  sucursalId: string;
-  sucursalNombre?: string;
-  sucursalCiudad?: string;
-  sucursalDireccion?: string;
-  horaLimiteRecogida?: string;
+  verificationCode: string;
+  status: EstadoReserva;
+  paymentMethod?: string;
+  clientId?: string;
+  packageId?: string;
+  branchId?: string;
+  notifiedExpiring?: boolean;
   createdAt?: string;
-  completadaEn?: string;
-  valorada?: boolean;
-}
-
-export interface ReservaResponse {
-  reserva: Reserva;
-  mensaje?: string;
+  updatedAt?: string;
+  completedAt?: string;
+  // Campos de presentación compuestos en el front (no vienen del backend).
+  packageName?: string;
+  branchName?: string;
+  branchCity?: string;
+  branchAddress?: string;
+  pickupDeadline?: string;
+  clientName?: string;
 }

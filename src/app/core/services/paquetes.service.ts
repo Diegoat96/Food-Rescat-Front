@@ -1,7 +1,8 @@
 import { Injectable, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { ApiService } from './api.service';
 import { Paquete, PaqueteRequest, PaquetesQuery } from '../models/paquete.model';
+import { PaginatedData } from '../models/paginated-data.model';
 
 @Injectable({ providedIn: 'root' })
 export class PaquetesService {
@@ -12,7 +13,8 @@ export class PaquetesService {
 
   cargar(query?: PaquetesQuery): Observable<Paquete[]> {
     this.cargando.set(true);
-    return this.api.get<Paquete[]>(`/paquetes${this.buildQuery(query)}`).pipe(
+    return this.api.get<PaginatedData<Paquete>>(`/packages${this.buildQuery(query)}`).pipe(
+      map((pag) => pag.data),
       tap((lista) => {
         this.paquetes.set(lista);
         this.cargando.set(false);
@@ -21,11 +23,11 @@ export class PaquetesService {
   }
 
   obtener(id: string): Observable<Paquete> {
-    return this.api.get<Paquete>(`/paquetes/${id}`);
+    return this.api.get<Paquete>(`/packages/${id}`);
   }
 
   crear(data: PaqueteRequest): Observable<Paquete> {
-    return this.api.post<Paquete>('/paquetes', data).pipe(
+    return this.api.post<Paquete>('/packages', data).pipe(
       tap((nuevo) => {
         this.paquetes.update((lista) =>
           lista.some((p) => p.id === nuevo.id) ? lista : [nuevo, ...lista],
@@ -39,14 +41,14 @@ export class PaquetesService {
       return '';
     }
     const params: string[] = [];
-    if (query.ciudad) {
-      params.push(`ciudad=${encodeURIComponent(query.ciudad)}`);
+    if (query.city) {
+      params.push(`city=${encodeURIComponent(query.city)}`);
     }
-    if (query.categoria) {
-      params.push(`categoria=${encodeURIComponent(query.categoria)}`);
+    if (query.categoryId) {
+      params.push(`categoryId=${encodeURIComponent(query.categoryId)}`);
     }
-    if (query.estado) {
-      params.push(`estado=${encodeURIComponent(query.estado)}`);
+    if (query.status) {
+      params.push(`status=${encodeURIComponent(query.status)}`);
     }
     if (query.skip !== undefined) {
       params.push(`skip=${query.skip}`);

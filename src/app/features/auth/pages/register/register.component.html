@@ -82,27 +82,6 @@
       }
     </div>
 
-    <div>
-      <label for="rol" class="block text-sm font-medium text-text mb-1">
-        Tipo de cuenta
-      </label>
-      <select
-        id="rol"
-        formControlName="rol"
-        class="w-full rounded-lg border border-border px-4 py-3 text-text
-               focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20
-               transition-colors"
-        [class.border-error]="isFieldInvalid('rol')"
-      >
-        <option value="" disabled>Selecciona un tipo</option>
-        <option [value]="Rol.CLIENTE">Cliente — Busco alimentos</option>
-        <option [value]="Rol.COMERCIO">Comercio — Ofrezco alimentos</option>
-      </select>
-      @if (isFieldInvalid('rol')) {
-        <p class="mt-1 text-sm text-error">Selecciona un tipo de cuenta.</p>
-      }
-    </div>
-
     <button
       type="submit"
       [disabled]="registerForm.invalid || isLoading()"

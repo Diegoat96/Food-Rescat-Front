@@ -1,5 +1,5 @@
 export enum Rol {
-  CLIENTE = 'CLIENTE',
-  COMERCIO = 'COMERCIO',
+  CLIENT = 'CLIENT',
+  BUSINESS = 'BUSINESS',
   ADMIN = 'ADMIN',
 }

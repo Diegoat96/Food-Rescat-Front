@@ -16,6 +16,13 @@ export const CLIENTE_ROUTES: Routes = [
         loadComponent: () =>
           import('./pages/historial/historial.component').then((m) => m.HistorialComponent),
       },
+      {
+        path: 'solicitud-negocio',
+        loadComponent: () =>
+          import('./pages/solicitud-negocio/solicitud-negocio.component').then(
+            (m) => m.SolicitudNegocioComponent,
+          ),
+      },
       { path: '', pathMatch: 'full', redirectTo: 'feed' },
     ],
   },

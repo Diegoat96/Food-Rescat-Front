@@ -23,7 +23,7 @@
     <!-- QR real generado a partir del código de verificación -->
     <div class="mt-5 flex justify-center rounded-2xl border border-border bg-surface-alt p-5">
       <qrcode
-        [qrdata]="reserva.codigoVerificacion"
+        [qrdata]="reserva.verificationCode"
         [width]="160"
         [colorDark]="'#1e293b'"
         [elementType]="'canvas'"
@@ -37,19 +37,19 @@
         Código de verificación
       </p>
       <p class="mt-1 font-mono text-3xl font-medium tracking-widest text-primary-800">
-        {{ reserva.codigoVerificacion }}
+        {{ reserva.verificationCode }}
       </p>
     </div>
 
     <div class="mt-5 space-y-3 border-t border-border pt-4">
       <div class="flex items-center justify-between">
         <span class="text-sm text-text-muted">Paquete</span>
-        <span class="text-sm font-semibold text-text">{{ reserva.paqueteNombre }}</span>
+        <span class="text-sm font-semibold text-text">{{ reserva.packageName }}</span>
       </div>
       <div class="flex items-center justify-between">
         <span class="text-sm text-text-muted">Sucursal</span>
         <span class="text-sm font-semibold text-text">
-          {{ reserva.sucursalNombre ?? 'Food Rescat' }}
+          {{ reserva.branchName ?? 'Food Rescat' }}
         </span>
       </div>
       <div class="flex items-center justify-between">

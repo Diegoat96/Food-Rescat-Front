@@ -1,7 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ReservasService } from '../../../../core/services/reservas.service';
 import { Reserva } from '../../../../core/models/reserva.model';
-import { ValoracionFormComponent } from '../../components/valoracion-form/valoracion-form.component';
 import { LoadingSpinnerComponent } from '../../../../core/components/loading-spinner/loading-spinner.component';
 import { EmptyStateComponent } from '../../../../core/components/empty-state/empty-state.component';
 
@@ -9,7 +8,6 @@ import { EmptyStateComponent } from '../../../../core/components/empty-state/emp
   selector: 'app-historial',
   standalone: true,
   imports: [
-    ValoracionFormComponent,
     LoadingSpinnerComponent,
     EmptyStateComponent,
   ],
@@ -34,11 +32,11 @@ export class HistorialComponent implements OnInit {
       next: (lista) => {
         this.reservas.set(
           lista
-            .filter((r) => r.estado === 'COMPLETADA')
+            .filter((r) => r.status === 'COMPLETED')
             .sort(
               (a, b) =>
-                new Date(b.completadaEn ?? b.createdAt ?? 0).getTime() -
-                new Date(a.completadaEn ?? a.createdAt ?? 0).getTime(),
+                new Date(b.completedAt ?? b.createdAt ?? 0).getTime() -
+                new Date(a.completedAt ?? a.createdAt ?? 0).getTime(),
             ),
         );
         this.cargando.set(false);
@@ -50,14 +48,8 @@ export class HistorialComponent implements OnInit {
     });
   }
 
-  onValorada(id: string): void {
-    this.reservas.update((lista) =>
-      lista.map((r) => (r.id === id ? { ...r, valorada: true } : r)),
-    );
-  }
-
   fechaCompletada(reserva: Reserva): string {
-    const iso = reserva.completadaEn ?? reserva.createdAt;
+    const iso = reserva.completedAt ?? reserva.createdAt;
     const fecha = new Date(iso ?? '');
     if (!iso || Number.isNaN(fecha.getTime())) {
       return '';

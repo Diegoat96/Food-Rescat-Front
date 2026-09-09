@@ -12,7 +12,7 @@ export class SucursalesService {
 
   cargar(): Observable<Sucursal[]> {
     this.cargando.set(true);
-    return this.api.get<Sucursal[]>('/sucursales').pipe(
+    return this.api.get<Sucursal[]>('/branches').pipe(
       tap((lista) => {
         this.sucursales.set(lista);
         this.cargando.set(false);
@@ -21,7 +21,7 @@ export class SucursalesService {
   }
 
   crear(data: SucursalRequest): Observable<Sucursal> {
-    return this.api.post<Sucursal>('/sucursales', data).pipe(
+    return this.api.post<Sucursal>('/branches', data).pipe(
       tap((nueva) => {
         this.sucursales.update((lista) => [...lista, nueva]);
       }),
@@ -29,7 +29,7 @@ export class SucursalesService {
   }
 
   actualizar(id: string, data: SucursalRequest): Observable<Sucursal> {
-    return this.api.put<Sucursal>(`/sucursales/${id}`, data).pipe(
+    return this.api.patch<Sucursal>(`/branches/${id}`, data).pipe(
       tap((editada) => {
         this.sucursales.update((lista) => lista.map((s) => (s.id === id ? editada : s)));
       }),

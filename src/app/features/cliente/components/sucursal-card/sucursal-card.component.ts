@@ -3,9 +3,9 @@ import { FavoritoButtonComponent } from '../favorito-button/favorito-button.comp
 
 export interface SucursalCardData {
   id: string;
-  nombre: string;
-  direccion: string;
-  ciudad?: string;
+  name: string;
+  address: string;
+  city?: string;
   rating?: number;
 }
 
@@ -20,7 +20,7 @@ export class SucursalCardComponent {
   @Input({ required: true }) sucursal!: SucursalCardData;
 
   iniciales(): string {
-    const nombre = this.sucursal.nombre.trim();
+    const nombre = this.sucursal.name.trim();
     const partes = nombre.split(/\s+/);
     return (partes[0]?.[0] ?? '?').toUpperCase();
   }

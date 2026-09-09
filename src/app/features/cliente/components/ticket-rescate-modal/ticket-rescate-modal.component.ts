@@ -25,7 +25,7 @@ export class TicketRescateModalComponent {
   }
 
   horaLimite(): string {
-    const fecha = new Date(this.reserva.horaLimiteRecogida ?? '');
+    const fecha = new Date(this.reserva.pickupDeadline ?? '');
     if (Number.isNaN(fecha.getTime())) {
       return 'lo antes posible';
     }

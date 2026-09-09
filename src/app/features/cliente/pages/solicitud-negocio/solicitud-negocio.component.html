@@ -1,0 +1,139 @@
+<div class="mx-auto max-w-2xl space-y-6 p-6 lg:p-8">
+  <div>
+    <h2 class="text-2xl font-bold text-text">Convertirme en negocio</h2>
+    <p class="mt-1 text-sm text-text-muted">
+      Envía tu solicitud para ofrecer alimentos a través de Food Rescat.
+    </p>
+  </div>
+
+  <!-- Estado actual de la solicitud -->
+  @if (cargando() && !solicitud()) {
+    <app-loading-spinner texto="Consultando estado…" />
+  } @else if (solicitud()) {
+    <section class="rounded-2xl border border-border bg-surface p-5">
+      <h3 class="mb-3 text-sm font-bold uppercase tracking-wide text-text-muted">Estado de tu solicitud</h3>
+      <div class="flex items-center gap-3">
+        <span
+          class="inline-flex rounded-full px-2.5 py-1 text-xs font-bold"
+          [class]="estadoBadge(solicitud()!.status)"
+        >
+          {{ estadoLabel(solicitud()!.status) }}
+        </span>
+        <span class="text-sm text-text-muted">
+          {{ solicitud()!.businessName }}
+        </span>
+      </div>
+      @if (solicitud()!.reason) {
+        <p class="mt-2 rounded-lg bg-error-light px-3 py-2 text-xs font-semibold text-error">
+          Motivo del rechazo: {{ solicitud()!.reason }}
+        </p>
+      }
+      @if (solicitud()!.status === BusinessRequestStatus.APPROVED) {
+        <p class="mt-2 text-sm text-green-700">
+          ¡Tu solicitud fue aprobada! Cierra sesión e inicia de nuevo para acceder a las funciones de negocio.
+        </p>
+      }
+    </section>
+  }
+
+  <!-- Formulario de nueva solicitud -->
+  @if (!solicitud() || solicitud()!.status === BusinessRequestStatus.REJECTED) {
+    @if (exito()) {
+      <div class="rounded-lg bg-primary-50 border border-primary-200 p-4">
+        <p class="text-sm font-semibold text-primary-700">
+          ¡Solicitud enviada! Te notificaremos cuando sea revisada.
+        </p>
+      </div>
+    }
+
+    @if (error()) {
+      <div class="rounded-lg bg-error-light border border-error/20 p-4">
+        <p class="text-sm text-error">{{ error() }}</p>
+      </div>
+    }
+
+    <section class="rounded-2xl border border-border bg-surface p-5">
+      <h3 class="mb-4 text-sm font-bold uppercase tracking-wide text-text-muted">Nueva solicitud</h3>
+
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+        <div>
+          <label for="businessName" class="mb-1 block text-sm font-medium text-text">
+            Nombre del negocio
+          </label>
+          <input
+            id="businessName"
+            type="text"
+            formControlName="businessName"
+            placeholder="Ej: Panadería Doña Mela"
+            class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+            [class.border-error]="isFieldInvalid('businessName')"
+          />
+          @if (isFieldInvalid('businessName')) {
+            <p class="mt-1 text-sm text-error">El nombre del negocio es obligatorio.</p>
+          }
+        </div>
+
+        <div>
+          <label for="address" class="mb-1 block text-sm font-medium text-text">
+            Dirección
+          </label>
+          <input
+            id="address"
+            type="text"
+            formControlName="address"
+            placeholder="Ej: 3a Avenida 1-45, Zona 1, Guatemala"
+            class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+            [class.border-error]="isFieldInvalid('address')"
+          />
+          @if (isFieldInvalid('address')) {
+            <p class="mt-1 text-sm text-error">La dirección es obligatoria.</p>
+          }
+        </div>
+
+        <div>
+          <label for="businessLicense" class="mb-1 block text-sm font-medium text-text">
+            Licencia comercial (PDF o imagen, máx. 5 MB)
+          </label>
+          <input
+            id="businessLicense"
+            type="file"
+            accept=".pdf,.jpg,.jpeg,.png"
+            (change)="onLicenseChange($event)"
+            class="w-full rounded-lg border border-border px-4 py-3 text-text text-sm file:mr-4 file:rounded-lg file:border-0 file:bg-primary-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-700"
+            [class.border-error]="isFieldInvalid('businessLicense')"
+          />
+          @if (isFieldInvalid('businessLicense')) {
+            <p class="mt-1 text-sm text-error">La licencia comercial es obligatoria.</p>
+          }
+        </div>
+
+        <div>
+          <label for="photo" class="mb-1 block text-sm font-medium text-text">
+            Foto del negocio (opcional, imagen máx. 5 MB)
+          </label>
+          <input
+            id="photo"
+            type="file"
+            accept=".jpg,.jpeg,.png,.webp"
+            (change)="onPhotoChange($event)"
+            class="w-full rounded-lg border border-border px-4 py-3 text-text text-sm file:mr-4 file:rounded-lg file:border-0 file:bg-primary-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-700"
+          />
+        </div>
+
+        <div class="flex justify-end pt-2">
+          <button
+            type="submit"
+            [disabled]="form.invalid || enviando()"
+            class="rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            @if (enviando()) {
+              Enviando…
+            } @else {
+              Enviar solicitud
+            }
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+</div>

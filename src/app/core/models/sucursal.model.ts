@@ -1,15 +1,17 @@
 export interface Sucursal {
   id: string;
-  comercioId: string;
-  nombreSucursal: string;
-  direccion: string;
-  latitud: number;
-  longitud: number;
+  businessId: string;
+  name: string;
+  address: string;
+  city?: string;
+  phone?: string;
+  openingHours?: string;
 }
 
 export interface SucursalRequest {
-  nombreSucursal: string;
-  direccion: string;
-  latitud: number;
-  longitud: number;
+  name: string;
+  address: string;
+  city?: string;
+  phone?: string;
+  openingHours?: string;
 }

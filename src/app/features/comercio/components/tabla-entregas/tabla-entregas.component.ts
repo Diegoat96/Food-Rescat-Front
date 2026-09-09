@@ -26,7 +26,7 @@ export class TablaEntregasComponent implements OnInit {
   }
 
   horaRecogida(reserva: Reserva): string {
-    const fecha = new Date(reserva.horaLimiteRecogida ?? '');
+    const fecha = new Date(reserva.pickupDeadline ?? '');
     if (Number.isNaN(fecha.getTime())) {
       return '—';
     }
@@ -34,11 +34,11 @@ export class TablaEntregasComponent implements OnInit {
   }
 
   badge(reserva: Reserva): { bag: string; texto: string } {
-    if (reserva.estado === 'COMPLETADA') {
+    if (reserva.status === 'COMPLETED') {
       return { bag: 'bg-green-100 text-green-800', texto: 'Rescatado' };
     }
-    if (reserva.estado === 'EXPIRADA' || reserva.estado === 'CANCELADA') {
-      return { bag: 'bg-border text-text-muted', texto: reserva.estado };
+    if (reserva.status === 'EXPIRED' || reserva.status === 'CANCELED') {
+      return { bag: 'bg-border text-text-muted', texto: reserva.status };
     }
     return { bag: 'bg-amber-100 text-amber-800', texto: 'Pendiente' };
   }

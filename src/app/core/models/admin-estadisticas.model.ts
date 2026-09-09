@@ -1,3 +1,4 @@
+// TODO: Verificar campos exactos contra el Swagger del backend real.
 export interface RescateDiario {
   fecha: string;
   kg: number;

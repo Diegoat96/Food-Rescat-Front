@@ -12,7 +12,7 @@ export class EstadisticasClienteService {
 
   cargar(): Observable<EstadisticasCliente> {
     this.cargando.set(true);
-    return this.api.get<EstadisticasCliente>('/clientes/me/estadisticas').pipe(
+    return this.api.get<EstadisticasCliente>('/customers/me/statistics').pipe(
       tap((data) => {
         this.datos.set(data);
         this.cargando.set(false);

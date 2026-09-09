@@ -45,7 +45,7 @@ export class LoginComponent {
     this.authService.login(this.loginForm.value).subscribe({
       next: (res: AuthResponse) => {
         this.isLoading.set(false);
-        this.authService.redirectByRole(res.usuario.rol);
+        this.authService.redirectByRole(res.user.role);
       },
       error: (err: { status: number }) => {
         this.isLoading.set(false);

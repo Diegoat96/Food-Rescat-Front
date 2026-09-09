@@ -23,6 +23,7 @@ export class ClienteLayoutComponent implements OnInit {
   readonly navItems = [
     { path: '/cliente/feed', label: 'Feed', icon: '🍽️' },
     { path: '/cliente/historial', label: 'Historial', icon: '🕘' },
+    { path: '/cliente/solicitud-negocio', label: 'Ser Negocio', icon: '🏪' },
   ];
 
   ngOnInit(): void {

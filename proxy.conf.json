@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://API_BACKEND_PENDIENTE",
+    "target": "http://localhost:3000",
     "secure": false,
     "changeOrigin": true
   }

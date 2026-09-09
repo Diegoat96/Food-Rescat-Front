@@ -43,9 +43,9 @@ export class FeedComponent {
     const cat = this.seleccionCategoria();
     return this.paquetes().filter((p) => {
       const matchCat =
-        cat === 'Todo' || (p.categoria?.nombre ?? '').toLowerCase() === cat.toLowerCase();
+        cat === 'Todo' || (p.category?.name ?? '').toLowerCase() === cat.toLowerCase();
       const matchTexto =
-        texto === '' || `${p.nombre} ${p.sucursal?.nombre ?? ''}`.toLowerCase().includes(texto);
+        texto === '' || `${p.name} ${p.branch?.name ?? ''}`.toLowerCase().includes(texto);
       return matchCat && matchTexto;
     });
   });
@@ -53,13 +53,13 @@ export class FeedComponent {
   readonly sucursales = computed<SucursalCardData[]>(() => {
     const vistas = new Map<string, SucursalCardData>();
     for (const p of this.paquetesFiltrados()) {
-      const s = p.sucursal;
+      const s = p.branch;
       if (s?.id && !vistas.has(s.id)) {
         vistas.set(s.id, {
           id: s.id,
-          nombre: s.nombre,
-          direccion: s.direccion,
-          ciudad: s.ciudad,
+          name: s.name,
+          address: s.address,
+          city: s.city,
         });
       }
     }
