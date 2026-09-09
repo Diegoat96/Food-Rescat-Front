@@ -1,0 +1,179 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
+  @if (publicado()) {
+    <div class="rounded-lg bg-primary-50 border border-primary-200 p-4">
+      <p class="text-sm font-semibold text-primary-700">
+        ¡Paquete publicado! Ya aparece en el feed del Cliente.
+      </p>
+    </div>
+  }
+
+  @if (variante === 'grande') {
+    <div>
+      <h3 class="text-lg font-bold text-text">Publicar paquete</h3>
+      <p class="mt-1 text-sm text-text-muted">
+        Completa los datos para ofrecer el alimento a los clientes.
+      </p>
+    </div>
+  }
+
+  <!-- Nombre -->
+  <div
+    [class.sm:grid]="variante === 'grande'"
+    [class.sm:grid-cols-2]="variante === 'grande'"
+    [class.sm:gap-4]="variante === 'grande'"
+  >
+    <div>
+      <label for="name" class="mb-1 block text-sm font-medium text-text"> Nombre del paquete </label>
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        placeholder="Ej: Verduras de temporada"
+        [class.py-3]="variante === 'grande'"
+        [class.py-2.5]="variante === 'compacta'"
+        class="w-full rounded-lg border border-border px-4 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+        [class.border-error]="isFieldInvalid('name')"
+      />
+      @if (isFieldInvalid('name')) {
+        <p class="mt-1 text-sm text-error">El nombre es obligatorio.</p>
+      }
+    </div>
+
+    <!-- Categoría -->
+    <div>
+      <label class="mb-1 block text-sm font-medium text-text">Categoría</label>
+      <app-categoria-select formControlName="categoryId" />
+    </div>
+  </div>
+
+  <!-- Descripción -->
+  @if (variante === 'grande') {
+    <div>
+      <label for="description" class="mb-1 block text-sm font-medium text-text"> Descripción </label>
+      <textarea
+        id="description"
+        formControlName="description"
+        rows="2"
+        placeholder="Describe el contenido del paquete..."
+        class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+      ></textarea>
+    </div>
+  }
+
+  <!-- Stepper quantity -->
+  <div>
+    <label class="mb-1 block text-sm font-medium text-text"> Cantidad de stock </label>
+    <div class="inline-flex items-center rounded-lg border border-border bg-surface">
+      <button
+        type="button"
+        (click)="ajustarStock(-1)"
+        class="px-4 py-2 text-lg font-bold text-text-muted hover:text-primary-600"
+      >
+        −
+      </button>
+      <input
+        id="quantity"
+        type="number"
+        formControlName="quantity"
+        min="1"
+        class="w-16 border-x border-border bg-surface py-2 text-center text-text focus:outline-none"
+      />
+      <button
+        type="button"
+        (click)="ajustarStock(1)"
+        class="px-4 py-2 text-lg font-bold text-text-muted hover:text-primary-600"
+      >
+        +
+      </button>
+    </div>
+    @if (isFieldInvalid('quantity')) {
+      <p class="mt-1 text-sm text-error">Mínimo 1 unidad.</p>
+    }
+  </div>
+
+  <!-- Hora límite de recogida -->
+  <div>
+    <label for="pickupDeadline" class="mb-1 block text-sm font-medium text-text">
+      Hora límite de recogida
+    </label>
+    <select
+      id="pickupDeadline"
+      formControlName="pickupDeadline"
+      class="w-full rounded-lg border border-border bg-surface px-4 py-3 text-text focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+      [class.border-error]="isFieldInvalid('pickupDeadline')"
+    >
+      <option value="" disabled>Selecciona una hora…</option>
+      @for (h of horarios; track h) {
+        <option [value]="h">{{ h }} hrs</option>
+      }
+    </select>
+    @if (isFieldInvalid('pickupDeadline')) {
+      <p class="mt-1 text-sm text-error">Elige una hora límite.</p>
+    }
+  </div>
+
+  <!-- Precios -->
+  <div class="grid gap-4 sm:grid-cols-2">
+    <div>
+      <label for="originalPrice" class="mb-1 block text-sm font-medium text-text">
+        Precio
+      </label>
+      <div class="relative">
+        <span
+          class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-sm font-bold text-text-muted"
+        >
+          Q
+        </span>
+        <input
+          id="originalPrice"
+          type="number"
+          step="any"
+          min="0"
+          formControlName="originalPrice"
+          placeholder="120"
+          class="w-full rounded-lg border border-border py-3 pl-8 pr-4 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+        />
+      </div>
+    </div>
+
+    <div>
+      <label for="discountedPrice" class="mb-1 block text-sm font-medium text-text">
+        Precio con descuento
+      </label>
+      <div class="relative">
+        <span
+          class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-sm font-bold text-text-muted"
+        >
+          Q
+        </span>
+        <input
+          id="discountedPrice"
+          type="number"
+          step="any"
+          min="0"
+          formControlName="discountedPrice"
+          placeholder="30"
+          class="w-full rounded-lg border border-border py-3 pl-8 pr-4 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Preview de descuento en vivo -->
+  <p class="rounded-lg bg-primary-50 px-4 py-3 text-sm font-semibold text-primary-700">
+    {{ preview() }}
+  </p>
+
+  <div class="flex items-center justify-end gap-3 pt-1">
+    @if (sucursales().length === 0) {
+      <p class="text-sm font-semibold text-error">Crea una sucursal antes de publicar.</p>
+    }
+    <button
+      type="submit"
+      [disabled]="form.invalid || guardando() || sucursales().length === 0"
+      class="rounded-lg bg-primary-600 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      {{ guardando() ? 'Publicando…' : 'Publicar' }}
+    </button>
+  </div>
+</form>

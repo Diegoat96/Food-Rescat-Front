@@ -1,0 +1,85 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+  <div>
+    <label for="name" class="mb-1 block text-sm font-medium text-text">
+      Nombre
+    </label>
+    <input
+      id="name"
+      type="text"
+      formControlName="name"
+      placeholder="Ej: Sucursal Centro"
+      class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+      [class.border-error]="isFieldInvalid('name')"
+    />
+    @if (isFieldInvalid('name')) {
+      <p class="mt-1 text-sm text-error">El nombre es obligatorio.</p>
+    }
+  </div>
+
+  <div>
+    <label for="address" class="mb-1 block text-sm font-medium text-text"> Dirección </label>
+    <input
+      id="address"
+      type="text"
+      formControlName="address"
+      placeholder="Ej: Av. Libertador 1234"
+      class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+      [class.border-error]="isFieldInvalid('address')"
+    />
+    @if (isFieldInvalid('address')) {
+      <p class="mt-1 text-sm text-error">La dirección es obligatoria.</p>
+    }
+  </div>
+
+  <div>
+    <label for="city" class="mb-1 block text-sm font-medium text-text"> Ciudad </label>
+    <input
+      id="city"
+      type="text"
+      formControlName="city"
+      placeholder="Ej: Guatemala"
+      class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+    />
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <label for="phone" class="mb-1 block text-sm font-medium text-text"> Teléfono </label>
+      <input
+        id="phone"
+        type="tel"
+        formControlName="phone"
+        placeholder="+502 5555 5555"
+        class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+      />
+    </div>
+
+    <div>
+      <label for="openingHours" class="mb-1 block text-sm font-medium text-text"> Horario </label>
+      <input
+        id="openingHours"
+        type="text"
+        formControlName="openingHours"
+        placeholder="Lun-Sáb 08:00-18:00"
+        class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+      />
+    </div>
+  </div>
+
+  <div class="flex justify-end gap-3 pt-1">
+    <button
+      type="button"
+      (click)="cancelar.emit()"
+      class="rounded-lg border border-border px-4 py-2 text-sm font-semibold text-text transition-colors hover:bg-surface-alt"
+    >
+      Cancelar
+    </button>
+    <button
+      type="submit"
+      [disabled]="form.invalid || guardando"
+      class="rounded-lg bg-primary-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      {{ esEdicion ? 'Guardar cambios' : 'Crear sucursal' }}
+    </button>
+  </div>
+</form>

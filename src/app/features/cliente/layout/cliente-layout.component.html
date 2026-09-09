@@ -1,0 +1,55 @@
+<div class="flex h-screen flex-col bg-surface-alt">
+  <header class="flex h-16 shrink-0 items-center justify-between border-b border-border bg-surface px-6">
+    <div class="flex items-center gap-2">
+      <span
+        class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-600 text-lg text-white"
+      >
+        🍃
+      </span>
+      <div>
+        <p class="text-base font-extrabold leading-tight text-text">Food Rescat</p>
+        <p class="text-xs text-text-muted">Cliente</p>
+      </div>
+    </div>
+
+    <nav class="hidden items-center gap-1 sm:flex">
+      @for (item of navItems; track item.path) {
+        <a
+          [routerLink]="item.path"
+          routerLinkActive="bg-primary-50 text-primary-700"
+          class="flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-semibold text-text-muted transition-colors hover:bg-surface-alt hover:text-text"
+        >
+          <span>{{ item.icon }}</span>
+          {{ item.label }}
+        </a>
+      }
+    </nav>
+
+    <div class="flex items-center gap-3">
+      <app-notificaciones />
+      @if (usuario()) {
+        <div class="flex items-center gap-2">
+          <span
+            class="flex h-9 w-9 items-center justify-center rounded-full bg-primary-100 text-sm font-bold text-primary-700"
+          >
+            {{ usuario()!.name.charAt(0).toUpperCase() }}
+          </span>
+          <div class="hidden sm:block">
+            <p class="text-sm font-semibold text-text">{{ usuario()!.name }}</p>
+            <p class="text-xs text-text-muted">{{ usuario()!.email }}</p>
+          </div>
+        </div>
+      }
+      <button
+        (click)="logout()"
+        class="ml-2 rounded-lg bg-error/10 px-3 py-2 text-sm font-medium text-error transition-colors hover:bg-error/20"
+      >
+        Cerrar Sesión
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-1 overflow-y-auto">
+    <router-outlet />
+  </main>
+</div>

@@ -1,0 +1,66 @@
+<aside class="flex h-full w-64 flex-col border-r border-border bg-surface">
+  <!-- Marca -->
+  <div class="flex items-center gap-2 px-5 py-5">
+    <span
+      class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-600 text-lg text-white"
+    >
+      🍃
+    </span>
+    <div>
+      <p class="text-base font-extrabold leading-tight text-text">Food Rescat</p>
+      <p class="text-xs text-text-muted">Comercio</p>
+    </div>
+  </div>
+
+  <!-- Sucursal activa -->
+  <div class="px-4">
+    @if (sucursalActiva().length) {
+      <div class="rounded-xl border border-border bg-surface-alt p-3">
+        <p class="text-[10px] font-semibold uppercase tracking-wide text-text-muted">
+          Sucursal activa
+        </p>
+        <p class="mt-1 truncate text-sm font-bold text-text">
+          {{ sucursalActiva()[0].name }}
+        </p>
+        <p class="truncate text-xs text-text-muted">
+          {{ sucursalActiva()[0].address }}
+        </p>
+        <a
+          routerLink="/comercio/sucursales"
+          class="mt-2 inline-block text-xs font-semibold text-primary-600 hover:text-primary-700"
+        >
+          Gestionar sucursales →
+        </a>
+      </div>
+    } @else {
+      <div class="rounded-xl border border-dashed border-border bg-surface-alt p-3">
+        <p class="text-xs text-text-muted">Sin sucursal asignada.</p>
+        <a
+          routerLink="/comercio/sucursales"
+          class="mt-2 inline-block text-xs font-semibold text-primary-600 hover:text-primary-700"
+        >
+          Crear sucursal →
+        </a>
+      </div>
+    }
+  </div>
+
+  <!-- Navegación -->
+  <nav class="mt-6 flex-1 space-y-1 px-4">
+    @for (item of navItems; track item.path) {
+      <a
+        [routerLink]="item.path"
+        routerLinkActive="bg-primary-50 text-primary-700"
+        class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-text-muted transition-colors hover:bg-surface-alt hover:text-text"
+      >
+        <span class="text-base">{{ item.icon }}</span>
+        {{ item.label }}
+      </a>
+    }
+  </nav>
+
+  <!-- Bloque "Hoy" (Sprint 4) -->
+  <div class="space-y-3 pb-5">
+    <app-estadisticas-hoy />
+  </div>
+</aside>

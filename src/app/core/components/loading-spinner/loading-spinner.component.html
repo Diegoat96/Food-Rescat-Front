@@ -1,0 +1,11 @@
+@if (compacto()) {
+  <p class="flex items-center justify-center gap-2 py-3 text-sm text-text-muted">
+    <span class="spinner h-4 w-4 border-2"></span>
+    <span>{{ texto() }}</span>
+  </p>
+} @else {
+  <div class="flex items-center justify-center gap-3 py-10 text-text-muted">
+    <span class="spinner h-8 w-8 border-4"></span>
+    <p class="text-sm">{{ texto() }}</p>
+  </div>
+}

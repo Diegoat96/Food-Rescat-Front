@@ -1,0 +1,15 @@
+.spinner {
+  display: inline-block;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  border-style: solid;
+  border-color: var(--color-primary-100);
+  border-top-color: var(--color-primary-600);
+  animation: app-spin 0.7s linear infinite;
+}
+
+@keyframes app-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

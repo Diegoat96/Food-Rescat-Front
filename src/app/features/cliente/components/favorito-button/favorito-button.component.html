@@ -1,0 +1,11 @@
+<button
+  type="button"
+  (click)="toggle($event)"
+  [attr.aria-pressed]="esFavorito"
+  [aria-label]="esFavorito ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+  class="flex h-8 w-8 items-center justify-center rounded-full bg-white/90 text-lg shadow-sm transition-colors"
+  [class.text-error]="esFavorito"
+  [class.text-text-muted]="!esFavorito"
+>
+  {{ esFavorito ? '❤️' : '🤍' }}
+</button>

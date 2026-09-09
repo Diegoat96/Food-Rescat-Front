@@ -1,0 +1,65 @@
+<div class="app-notificaciones relative">
+  <button
+    type="button"
+    (click)="alternar()"
+    aria-label="Notificaciones"
+    class="relative flex h-9 w-9 items-center justify-center rounded-full text-lg transition-colors hover:bg-surface-alt"
+  >
+    🔔
+    @if (noLeidas() > 0) {
+      <span
+        class="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-error px-1 text-[10px] font-bold text-white"
+      >
+        {{ noLeidas() > 99 ? '99+' : noLeidas() }}
+      </span>
+    }
+  </button>
+
+  @if (abierto()) {
+    <div
+      class="absolute right-0 z-50 mt-2 w-80 overflow-hidden rounded-2xl border border-border bg-surface shadow-xl"
+    >
+      <div class="border-b border-border px-4 py-3">
+        <p class="text-sm font-bold text-text">Notificaciones</p>
+      </div>
+
+      @if (cargando() && notificaciones().length === 0) {
+        <app-loading-spinner texto="Cargando…" [compacto]="true" />
+      } @else if (notificaciones().length === 0) {
+        <div class="p-6">
+          <app-empty-state
+            icono="🔕"
+            titulo="Sin notificaciones"
+            descripcion="Aquí verás novedades de tus rescates."
+            [compacto]="true"
+          />
+        </div>
+      } @else {
+        <div class="max-h-80 divide-y divide-border overflow-y-auto">
+          @for (n of notificaciones(); track n.id) {
+            <button
+              type="button"
+              (click)="marcarLeida(n.id)"
+              class="flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-alt"
+              [class.bg-primary-50/60]="!n.read"
+            >
+              <span class="mt-0.5 text-base">{{ n.read ? '🔔' : '⚪' }}</span>
+              <span class="flex-1">
+                <p
+                  class="text-sm text-text"
+                  [class.font-semibold]="!n.read"
+                >
+                  {{ n.message }}
+                </p>
+                <p class="mt-0.5 text-xs text-text-muted">{{ fecha(n.createdAt) }}</p>
+              </span>
+              @if (!n.read) {
+                <span class="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary-500"></span>
+              }
+            </button>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>
