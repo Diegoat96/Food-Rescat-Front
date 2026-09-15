@@ -1,4 +1,5 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
 import { AdminService } from '../../../../core/services/admin.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Usuario } from '../../../../core/models/usuario.model';
@@ -7,11 +8,12 @@ import { BusinessRequest } from '../../../../core/models/business-request.model'
 import { LoadingSpinnerComponent } from '../../../../core/components/loading-spinner/loading-spinner.component';
 import { EmptyStateComponent } from '../../../../core/components/empty-state/empty-state.component';
 import { ConfirmDialogComponent } from '../../../../core/components/confirm-dialog/confirm-dialog.component';
+import { VerDocumentoModalComponent } from '../../../../core/components/ver-documento-modal/ver-documento-modal.component';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [LoadingSpinnerComponent, EmptyStateComponent, ConfirmDialogComponent],
+  imports: [LoadingSpinnerComponent, EmptyStateComponent, ConfirmDialogComponent, LucideAngularModule, VerDocumentoModalComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
@@ -29,6 +31,7 @@ export class AdminDashboardComponent implements OnInit {
   readonly solicitudes = this.adminService.solicitudes;
   readonly cargandoSolicitudes = this.adminService.cargandoSolicitudes;
   readonly filtroSolicitud = signal<string>('');
+  readonly documento = signal<{ url: string; titulo: string } | null>(null);
 
   readonly rolSeleccionado = signal<'TODOS' | Rol>('TODOS');
   readonly Rol = Rol;
@@ -54,14 +57,14 @@ export class AdminDashboardComponent implements OnInit {
       ? (e.packagesByStatus ?? []).reduce((sum, p) => sum + Number(p.count), 0)
       : 0;
     return [
-      { label: 'Usuarios', valor: String(this.usuarios().length), icono: '👥' },
+      { label: 'Usuarios', valor: String(this.usuarios().length), icono: 'users' },
       {
         label: 'Comercios',
         valor: String(this.usuarios().filter((u) => u.role === Rol.BUSINESS).length),
-        icono: '🏪',
+        icono: 'store',
       },
-      { label: 'Kg rescatados', valor: totalKg, icono: '🥦' },
-      { label: 'Paquetes publicados', valor: String(totalPaquetes), icono: '📦' },
+      { label: 'Kg rescatados', valor: totalKg, icono: 'leaf' },
+      { label: 'Paquetes publicados', valor: String(totalPaquetes), icono: 'package' },
     ];
   });
 
@@ -110,6 +113,21 @@ export class AdminDashboardComponent implements OnInit {
     if (reason !== null && reason.trim()) {
       this.adminService.rechazarSolicitud(id, reason.trim()).subscribe();
     }
+  }
+
+  verDocumento(solicitud: BusinessRequest, tipo: 'licencia' | 'foto'): void {
+    const url = tipo === 'licencia' ? solicitud.businessLicenseUrl : solicitud.photoUrl;
+    if (!url) {
+      return;
+    }
+    this.documento.set({
+      url,
+      titulo: tipo === 'licencia' ? 'Licencia comercial' : 'Foto del negocio',
+    });
+  }
+
+  cerrarDocumento(): void {
+    this.documento.set(null);
   }
 
   badgeRol(role: Rol): string {

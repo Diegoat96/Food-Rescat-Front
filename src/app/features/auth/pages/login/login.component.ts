@@ -2,13 +2,14 @@ import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { LucideAngularModule } from 'lucide-angular';
 import { AuthService } from '../../../../core/services/auth.service';
 import { AuthResponse } from '../../../../core/models/auth-response.model';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, LucideAngularModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -20,6 +21,11 @@ export class LoginComponent {
   loginForm: FormGroup;
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
+  mostrarPassword = signal(false);
+
+  togglePassword(): void {
+    this.mostrarPassword.update((v) => !v);
+  }
 
   constructor() {
     this.loginForm = this.fb.group({

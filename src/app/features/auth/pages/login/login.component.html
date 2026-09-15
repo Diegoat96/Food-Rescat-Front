@@ -42,16 +42,26 @@
       <label for="password" class="block text-sm font-medium text-text mb-1">
         Contraseña
       </label>
-      <input
-        id="password"
-        type="password"
-        formControlName="password"
-        placeholder="Mínimo 8 caracteres"
-        class="w-full rounded-lg border border-border px-4 py-3 text-text placeholder-text-muted/50
-               focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20
-               transition-colors"
-        [class.border-error]="isFieldInvalid('password')"
-      />
+      <div class="relative">
+        <input
+          id="password"
+          [type]="mostrarPassword() ? 'text' : 'password'"
+          formControlName="password"
+          placeholder="Mínimo 8 caracteres"
+          class="w-full rounded-lg border border-border px-4 py-3 pr-11 text-text placeholder-text-muted/50
+                 focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20
+                 transition-colors"
+          [class.border-error]="isFieldInvalid('password')"
+        />
+        <button
+          type="button"
+          (click)="togglePassword()"
+          [attr.aria-label]="mostrarPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+          class="absolute right-3 top-1/2 flex h-6 w-6 -translate-y-1/2 items-center justify-center text-text-muted transition-colors hover:text-text"
+        >
+          <lucide-icon [name]="mostrarPassword() ? 'eye-off' : 'eye'" size="18" />
+        </button>
+      </div>
       @if (isFieldInvalid('password')) {
         <p class="mt-1 text-sm text-error">
           @if (loginForm.get('password')?.errors?.['required']) {

@@ -1,11 +1,12 @@
 import { Component, OnInit, computed, inject } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
 import { EstadisticasService } from '../../../../core/services/estadisticas.service';
 import { LoadingSpinnerComponent } from '../../../../core/components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-estadisticas-hoy',
   standalone: true,
-  imports: [LoadingSpinnerComponent],
+  imports: [LoadingSpinnerComponent, LucideAngularModule],
   templateUrl: './estadisticas-hoy.component.html',
   styleUrl: './estadisticas-hoy.component.css',
 })

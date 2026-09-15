@@ -1,5 +1,6 @@
 import { Component, OnInit, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { LucideAngularModule } from 'lucide-angular';
 import { PublicarPaqueteFormComponent } from '../../components/publicar-paquete-form/publicar-paquete-form.component';
 import { EstadisticasService } from '../../../../core/services/estadisticas.service';
 import { LoadingSpinnerComponent } from '../../../../core/components/loading-spinner/loading-spinner.component';
@@ -7,7 +8,7 @@ import { LoadingSpinnerComponent } from '../../../../core/components/loading-spi
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [RouterLink, PublicarPaqueteFormComponent, LoadingSpinnerComponent],
+  imports: [RouterLink, PublicarPaqueteFormComponent, LoadingSpinnerComponent, LucideAngularModule],
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.css',
 })
@@ -23,17 +24,17 @@ export class InicioComponent implements OnInit {
       return [];
     }
     return [
-      { label: 'Paquetes activos', valor: String(k.activePackages ?? 0), icono: '📦' },
-      { label: 'Pendientes hoy', valor: String(k.pendingToday ?? 0), icono: '⏳' },
+      { label: 'Paquetes activos', valor: String(k.activePackages ?? 0), icono: 'package' },
+      { label: 'Pendientes hoy', valor: String(k.pendingToday ?? 0), icono: 'hourglass' },
       {
         label: 'Kg rescatados hoy',
         valor: `${Number(k.kgRescuedToday ?? 0).toLocaleString('es-GT')} kg`,
-        icono: '🥦',
+        icono: 'leaf',
       },
       {
         label: 'Ingresos esta semana',
         valor: `Q${Number(k.weeklyRevenue ?? 0).toFixed(2)}`,
-        icono: '💰',
+        icono: 'wallet',
       },
     ];
   });

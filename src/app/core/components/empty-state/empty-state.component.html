@@ -3,7 +3,7 @@
   [class.p-10]="!compacto()"
   [class.p-6]="compacto()"
 >
-  <div class="text-4xl" [class.text-3xl]="compacto()">{{ icono() }}</div>
+  <lucide-icon [name]="icono()" [size]="compacto() ? 30 : 48" class="text-text-muted/60" />
   <h3 class="mt-2 font-bold text-text" [class.text-lg]="!compacto()" [class.text-sm]="compacto()">
     {{ titulo() }}
   </h3>

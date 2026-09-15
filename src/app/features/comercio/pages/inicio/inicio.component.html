@@ -38,7 +38,9 @@
       <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
         @for (m of metricas(); track m.label) {
           <div class="rounded-xl bg-surface-alt p-4">
-            <div class="text-2xl">{{ m.icono }}</div>
+            <div class="flex items-center justify-center rounded-xl bg-surface-alt p-4">
+            <lucide-icon [name]="m.icono" size="28" class="text-primary-600" />
+          </div>
             <p class="mt-2 text-2xl font-extrabold text-text">{{ m.valor }}</p>
             <p class="text-sm text-text-muted">{{ m.label }}</p>
           </div>
