@@ -1,4 +1,5 @@
 import { Component, HostListener, inject, signal } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
 import { NotificacionesService } from '../../../../core/services/notificaciones.service';
 import { LoadingSpinnerComponent } from '../../../../core/components/loading-spinner/loading-spinner.component';
 import { EmptyStateComponent } from '../../../../core/components/empty-state/empty-state.component';
@@ -6,7 +7,7 @@ import { EmptyStateComponent } from '../../../../core/components/empty-state/emp
 @Component({
   selector: 'app-notificaciones',
   standalone: true,
-  imports: [LoadingSpinnerComponent, EmptyStateComponent],
+  imports: [LoadingSpinnerComponent, EmptyStateComponent, LucideAngularModule],
   templateUrl: './notificaciones.component.html',
   styleUrl: './notificaciones.component.css',
 })

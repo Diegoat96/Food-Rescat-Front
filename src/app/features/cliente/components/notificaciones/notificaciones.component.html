@@ -3,9 +3,9 @@
     type="button"
     (click)="alternar()"
     aria-label="Notificaciones"
-    class="relative flex h-9 w-9 items-center justify-center rounded-full text-lg transition-colors hover:bg-surface-alt"
+    class="relative flex h-9 w-9 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-surface-alt hover:text-text"
   >
-    🔔
+    <lucide-icon name="bell" size="20" />
     @if (noLeidas() > 0) {
       <span
         class="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-error px-1 text-[10px] font-bold text-white"
@@ -28,7 +28,7 @@
       } @else if (notificaciones().length === 0) {
         <div class="p-6">
           <app-empty-state
-            icono="🔕"
+            icono="bell-off"
             titulo="Sin notificaciones"
             descripcion="Aquí verás novedades de tus rescates."
             [compacto]="true"
@@ -43,7 +43,7 @@
               class="flex w-full items-start gap-3 px-4 py-3 text-left transition-colors hover:bg-surface-alt"
               [class.bg-primary-50/60]="!n.read"
             >
-              <span class="mt-0.5 text-base">{{ n.read ? '🔔' : '⚪' }}</span>
+              <lucide-icon [name]="n.read ? 'bell' : 'bell-ring'" size="16" class="mt-0.5 text-text-muted" />
               <span class="flex-1">
                 <p
                   class="text-sm text-text"

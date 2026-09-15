@@ -1,4 +1,5 @@
 import { Injectable, signal, computed } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, tap, catchError, of } from 'rxjs';
 import { ApiService } from './api.service';
@@ -44,8 +45,10 @@ export class AuthService {
       tap((user) => {
         this.currentUser.set(user);
       }),
-      catchError(() => {
-        this.logout();
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === 401) {
+          this.logout();
+        }
         return of(null);
       }),
     );

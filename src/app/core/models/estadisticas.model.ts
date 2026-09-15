@@ -1,14 +1,12 @@
-// TODO: Verificar campos exactos contra el Swagger del backend real.
-// Estos nombres son una estimación basada en el README.
 export interface EstadisticasHoy {
-  kgRescatadosHoy: number;
-  pedidosCompletadosHoy: number;
-  ingresosHoy: number;
+  kgRescuedToday: number;
+  ordersCompletedToday: number;
+  revenueToday: number;
 }
 
 export interface EstadisticasKpis {
-  paquetesActivos: number;
-  pendientesHoy: number;
-  kgRescatadosHoy: number;
-  ingresosSemana: number;
+  activePackages: number;
+  pendingToday: number;
+  kgRescuedToday: number;
+  weeklyRevenue: number;
 }

@@ -1,4 +1,5 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
 import { AdminService } from '../../../../core/services/admin.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { Usuario } from '../../../../core/models/usuario.model';
@@ -6,17 +7,21 @@ import { Rol } from '../../../../core/models/rol.enum';
 import { BusinessRequest } from '../../../../core/models/business-request.model';
 import { LoadingSpinnerComponent } from '../../../../core/components/loading-spinner/loading-spinner.component';
 import { EmptyStateComponent } from '../../../../core/components/empty-state/empty-state.component';
+import { ConfirmDialogComponent } from '../../../../core/components/confirm-dialog/confirm-dialog.component';
+import { VerDocumentoModalComponent } from '../../../../core/components/ver-documento-modal/ver-documento-modal.component';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [LoadingSpinnerComponent, EmptyStateComponent],
+  imports: [LoadingSpinnerComponent, EmptyStateComponent, ConfirmDialogComponent, LucideAngularModule, VerDocumentoModalComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
 export class AdminDashboardComponent implements OnInit {
   private adminService = inject(AdminService);
   readonly authService = inject(AuthService);
+
+  readonly mostrarConfirmacionLogout = signal(false);
 
   readonly usuarios = this.adminService.usuarios;
   readonly cargandoUsuarios = this.adminService.cargandoUsuarios;
@@ -26,6 +31,7 @@ export class AdminDashboardComponent implements OnInit {
   readonly solicitudes = this.adminService.solicitudes;
   readonly cargandoSolicitudes = this.adminService.cargandoSolicitudes;
   readonly filtroSolicitud = signal<string>('');
+  readonly documento = signal<{ url: string; titulo: string } | null>(null);
 
   readonly rolSeleccionado = signal<'TODOS' | Rol>('TODOS');
   readonly Rol = Rol;
@@ -46,30 +52,25 @@ export class AdminDashboardComponent implements OnInit {
 
   readonly cards = computed(() => {
     const e = this.estadisticas();
-    if (!e) {
-      return [];
-    }
+    const totalKg = e ? Number(e.kgRescuedTotal ?? 0).toLocaleString('es-GT') : '0';
+    const totalPaquetes = e
+      ? (e.packagesByStatus ?? []).reduce((sum, p) => sum + Number(p.count), 0)
+      : 0;
     return [
-      { label: 'Usuarios', valor: String(e.totalUsuarios), icono: '👥' },
-      { label: 'Comercios', valor: String(e.totalComercios), icono: '🏪' },
-      { label: 'Rescates completados', valor: String(e.totalRescates), icono: '✅' },
+      { label: 'Usuarios', valor: String(this.usuarios().length), icono: 'users' },
       {
-        label: 'Kg rescatados',
-        valor: Number(e.totalKgRescatados).toLocaleString('es-GT'),
-        icono: '🥦',
+        label: 'Comercios',
+        valor: String(this.usuarios().filter((u) => u.role === Rol.BUSINESS).length),
+        icono: 'store',
       },
+      { label: 'Kg rescatados', valor: totalKg, icono: 'leaf' },
+      { label: 'Paquetes publicados', valor: String(totalPaquetes), icono: 'package' },
     ];
   });
 
-  readonly barras = computed(() => {
-    const dias = this.estadisticas()?.rescatadosUltimos7Dias ?? [];
-    const max = Math.max(1, ...dias.map((d) => Number(d.kg)));
-    return dias.map((d) => ({
-      etiqueta: etiquetaDia(d.fecha),
-      kg: Number(d.kg),
-      pct: Math.max(3, Math.round((Number(d.kg) / max) * 100)),
-    }));
-  });
+  readonly rankingSucursales = computed(() => this.estadisticas()?.topBranches ?? []);
+
+  readonly paquetesPorEstado = computed(() => this.estadisticas()?.packagesByStatus ?? []);
 
   ngOnInit(): void {
     this.cargarEstadisticas();
@@ -114,6 +115,21 @@ export class AdminDashboardComponent implements OnInit {
     }
   }
 
+  verDocumento(solicitud: BusinessRequest, tipo: 'licencia' | 'foto'): void {
+    const url = tipo === 'licencia' ? solicitud.businessLicenseUrl : solicitud.photoUrl;
+    if (!url) {
+      return;
+    }
+    this.documento.set({
+      url,
+      titulo: tipo === 'licencia' ? 'Licencia comercial' : 'Foto del negocio',
+    });
+  }
+
+  cerrarDocumento(): void {
+    this.documento.set(null);
+  }
+
   badgeRol(role: Rol): string {
     switch (role) {
       case Rol.BUSINESS:
@@ -135,12 +151,17 @@ export class AdminDashboardComponent implements OnInit {
         return 'bg-amber-100 text-amber-800';
     }
   }
-}
 
-function etiquetaDia(iso: string): string {
-  const fecha = new Date(iso);
-  if (Number.isNaN(fecha.getTime())) {
-    return iso;
+  preguntarLogout(): void {
+    this.mostrarConfirmacionLogout.set(true);
   }
-  return fecha.toLocaleDateString('es-GT', { weekday: 'short' });
+
+  confirmarLogout(): void {
+    this.mostrarConfirmacionLogout.set(false);
+    this.authService.logout();
+  }
+
+  cancelarLogout(): void {
+    this.mostrarConfirmacionLogout.set(false);
+  }
 }

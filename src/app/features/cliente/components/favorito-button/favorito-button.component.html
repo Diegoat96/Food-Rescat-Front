@@ -7,5 +7,9 @@
   [class.text-error]="esFavorito"
   [class.text-text-muted]="!esFavorito"
 >
-  {{ esFavorito ? '❤️' : '🤍' }}
+  <lucide-icon
+    name="heart"
+    size="20"
+    [class]="esFavorito ? 'transition-colors fill-current' : 'transition-colors'"
+  />
 </button>

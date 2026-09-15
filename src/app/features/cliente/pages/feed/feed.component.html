@@ -4,7 +4,9 @@
 
     <!-- Buscador -->
     <div class="flex items-center gap-2 rounded-2xl border border-border bg-surface px-4 py-3">
-      <span class="text-text-muted">🔍</span>
+      <span class="flex items-center text-text-muted">
+      <lucide-icon name="search" size="18" />
+    </span>
       <input
         type="text"
         placeholder="Buscar alimentos o comercio…"
@@ -36,7 +38,7 @@
       <app-loading-spinner texto="Cargando paquetes…" />
     } @else if (paquetesFiltrados().length === 0) {
       <app-empty-state
-        icono="🍽️"
+        icono="utensils"
         titulo="No hay paquetes disponibles"
         descripcion="Los comercios aún no han publicado alimentos. ¡Vuelve pronto!"
       />

@@ -2,9 +2,9 @@
   <!-- Marca -->
   <div class="flex items-center gap-2 px-5 py-5">
     <span
-      class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-600 text-lg text-white"
+      class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-600 text-white"
     >
-      🍃
+      <lucide-icon name="heart-handshake" size="20" />
     </span>
     <div>
       <p class="text-base font-extrabold leading-tight text-text">Food Rescat</p>
@@ -53,7 +53,7 @@
         routerLinkActive="bg-primary-50 text-primary-700"
         class="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-text-muted transition-colors hover:bg-surface-alt hover:text-text"
       >
-        <span class="text-base">{{ item.icon }}</span>
+        <lucide-icon [name]="item.icon" size="18" />
         {{ item.label }}
       </a>
     }
