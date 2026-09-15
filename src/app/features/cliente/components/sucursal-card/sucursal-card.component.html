@@ -12,10 +12,14 @@
     <p class="mt-0.5 line-clamp-2 text-xs text-text-muted">{{ sucursal.address }}</p>
     <div class="mt-1.5 flex items-center gap-2 text-xs">
       @if (sucursal.city) {
-        <span class="text-text-muted">📍 {{ sucursal.city }}</span>
+        <span class="flex items-center gap-1 text-text-muted">
+          <lucide-icon name="map-pin" size="12" /> {{ sucursal.city }}
+        </span>
       }
       @if (sucursal.rating != null) {
-        <span class="font-semibold text-text">⭐ {{ sucursal.rating.toFixed(1) }}</span>
+        <span class="flex items-center gap-1 font-semibold text-text">
+          <lucide-icon name="star" size="12" class="text-amber-400" /> {{ sucursal.rating.toFixed(1) }}
+        </span>
       }
     </div>
   </div>

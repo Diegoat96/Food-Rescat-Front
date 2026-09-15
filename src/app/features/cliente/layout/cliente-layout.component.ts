@@ -1,5 +1,6 @@
 import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { LucideAngularModule } from 'lucide-angular';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificacionesService } from '../../../core/services/notificaciones.service';
 import { FavoritosService } from '../../../core/services/favoritos.service';
@@ -9,7 +10,7 @@ import { ConfirmDialogComponent } from '../../../core/components/confirm-dialog/
 @Component({
   selector: 'app-cliente-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, NotificacionesComponent, ConfirmDialogComponent],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, NotificacionesComponent, ConfirmDialogComponent, LucideAngularModule],
   templateUrl: './cliente-layout.component.html',
   styleUrl: './cliente-layout.component.css',
 })
@@ -24,9 +25,9 @@ export class ClienteLayoutComponent implements OnInit {
   readonly mostrarConfirmacionLogout = signal(false);
 
   readonly navItems = [
-    { path: '/cliente/feed', label: 'Feed', icon: '🍽️' },
-    { path: '/cliente/historial', label: 'Historial', icon: '🕘' },
-    { path: '/cliente/solicitud-negocio', label: 'Ser Negocio', icon: '🏪' },
+    { path: '/cliente/feed', label: 'Feed', icon: 'utensils' },
+    { path: '/cliente/historial', label: 'Historial', icon: 'history' },
+    { path: '/cliente/solicitud-negocio', label: 'Ser Negocio', icon: 'store' },
   ];
 
   ngOnInit(): void {

@@ -1,10 +1,12 @@
 import { Component, inject, signal } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
 import { finalize, switchMap } from 'rxjs';
 import { ReservasService } from '../../../../core/services/reservas.service';
 
 @Component({
   selector: 'app-verificacion-caja',
   standalone: true,
+  imports: [LucideAngularModule],
   templateUrl: './verificacion-caja.component.html',
   styleUrl: './verificacion-caja.component.css',
 })
@@ -45,7 +47,7 @@ export class VerificacionCajaComponent {
       )
       .subscribe({
         next: (reserva) => {
-          this.exito.set(`✅ Entrega completada para el pedido ${reserva.id.toUpperCase()}.`);
+          this.exito.set(`Entrega completada para el pedido ${reserva.id.toUpperCase()}.`);
           this.codigo.set('');
           this.reservasService.cargarPendientes().subscribe();
         },

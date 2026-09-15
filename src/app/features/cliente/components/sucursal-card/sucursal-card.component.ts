@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
 import { FavoritoButtonComponent } from '../favorito-button/favorito-button.component';
 
 export interface SucursalCardData {
@@ -12,7 +13,7 @@ export interface SucursalCardData {
 @Component({
   selector: 'app-sucursal-card',
   standalone: true,
-  imports: [FavoritoButtonComponent],
+  imports: [FavoritoButtonComponent, LucideAngularModule],
   templateUrl: './sucursal-card.component.html',
   styleUrl: './sucursal-card.component.css',
 })

@@ -1,5 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { LucideAngularModule } from 'lucide-angular';
 import { BusinessRequestsService } from '../../../../core/services/business-requests.service';
 import { BusinessRequest, BusinessRequestStatus } from '../../../../core/models/business-request.model';
 import { LoadingSpinnerComponent } from '../../../../core/components/loading-spinner/loading-spinner.component';
@@ -7,7 +8,7 @@ import { LoadingSpinnerComponent } from '../../../../core/components/loading-spi
 @Component({
   selector: 'app-solicitud-negocio',
   standalone: true,
-  imports: [ReactiveFormsModule, LoadingSpinnerComponent],
+  imports: [ReactiveFormsModule, LoadingSpinnerComponent, LucideAngularModule],
   templateUrl: './solicitud-negocio.component.html',
   styleUrl: './solicitud-negocio.component.css',
 })
@@ -33,6 +34,9 @@ export class SolicitudNegocioComponent implements OnInit {
   private archivoLicense: File | null = null;
   private archivoPhoto: File | null = null;
 
+  readonly nombreArchivoLicense = signal<string | null>(null);
+  readonly nombreArchivoPhoto = signal<string | null>(null);
+
   ngOnInit(): void {
     this.businessRequestsService.miSolicitud().subscribe();
   }
@@ -47,12 +51,35 @@ export class SolicitudNegocioComponent implements OnInit {
     this.archivoLicense = input.files?.[0] ?? null;
     if (this.archivoLicense) {
       this.form.get('businessLicense')?.setValue(this.archivoLicense);
+      this.nombreArchivoLicense.set(this.archivoLicense.name);
+    } else {
+      this.form.get('businessLicense')?.setValue(null);
+      this.nombreArchivoLicense.set(null);
     }
   }
 
   onPhotoChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     this.archivoPhoto = input.files?.[0] ?? null;
+    if (this.archivoPhoto) {
+      this.form.get('photo')?.setValue(this.archivoPhoto);
+      this.nombreArchivoPhoto.set(this.archivoPhoto.name);
+    } else {
+      this.form.get('photo')?.setValue(null);
+      this.nombreArchivoPhoto.set(null);
+    }
+  }
+
+  removerLicencia(): void {
+    this.archivoLicense = null;
+    this.form.get('businessLicense')?.setValue(null);
+    this.nombreArchivoLicense.set(null);
+  }
+
+  removerFoto(): void {
+    this.archivoPhoto = null;
+    this.form.get('photo')?.setValue(null);
+    this.nombreArchivoPhoto.set(null);
   }
 
   onSubmit(): void {

@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
 import { Paquete } from '../../../../core/models/paquete.model';
 import { EstadoBadgeComponent } from '../estado-badge/estado-badge.component';
 import { ReservasService } from '../../../../core/services/reservas.service';
@@ -8,7 +9,7 @@ import { FavoritoButtonComponent } from '../favorito-button/favorito-button.comp
 @Component({
   selector: 'app-paquete-card',
   standalone: true,
-  imports: [EstadoBadgeComponent, FavoritoButtonComponent],
+  imports: [EstadoBadgeComponent, FavoritoButtonComponent, LucideAngularModule],
   templateUrl: './paquete-card.component.html',
   styleUrl: './paquete-card.component.css',
 })
@@ -52,21 +53,21 @@ export class PaqueteCardComponent {
     this.metodoPago.set((event.target as HTMLSelectElement).value);
   }
 
-  emoji(): string {
+  iconoCategoria(): string {
     const nombre = this.paquete.category?.name?.toLowerCase() ?? '';
     if (nombre.includes('pan')) {
-      return '🥖';
+      return 'croissant';
     }
     if (nombre.includes('bebida') || nombre.includes('caf')) {
-      return '☕';
+      return 'coffee';
     }
     if (nombre.includes('fruta') || nombre.includes('verd')) {
-      return '🥦';
+      return 'carrot';
     }
     if (nombre.includes('carne')) {
-      return '🍗';
+      return 'drumstick';
     }
-    return '🍱';
+    return 'utensils';
   }
 
   horaLimite(): string {

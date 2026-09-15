@@ -1,4 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
 import { SucursalesService } from '../../../../core/services/sucursales.service';
 import { Sucursal, SucursalRequest } from '../../../../core/models/sucursal.model';
 import { SucursalFormComponent } from './sucursal-form.component';
@@ -8,7 +9,7 @@ import { EmptyStateComponent } from '../../../../core/components/empty-state/emp
 @Component({
   selector: 'app-sucursales',
   standalone: true,
-  imports: [SucursalFormComponent, LoadingSpinnerComponent, EmptyStateComponent],
+  imports: [SucursalFormComponent, LoadingSpinnerComponent, EmptyStateComponent, LucideAngularModule],
   templateUrl: './sucursales.component.html',
   styleUrl: './sucursales.component.css',
 })
