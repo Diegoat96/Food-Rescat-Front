@@ -30,7 +30,7 @@
     <app-loading-spinner texto="Cargando sucursales…" />
   } @else if (sucursales().length === 0) {
     <app-empty-state
-      icono="🏪"
+      icono="store"
       titulo="Aún no tienes sucursales"
       descripcion="Crea tu primera sucursal para empezar a publicar alimentos."
     />
@@ -40,9 +40,9 @@
         <div class="rounded-2xl border border-border bg-surface p-4">
           <div class="flex items-start justify-between">
             <span
-              class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-50 text-lg"
+              class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary-50 text-primary-600"
             >
-              🏪
+              <lucide-icon name="store" size="20" />
             </span>
             <button
               (click)="abrirEditar(s)"

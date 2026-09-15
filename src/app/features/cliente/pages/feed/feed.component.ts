@@ -1,4 +1,5 @@
 import { Component, DestroyRef, computed, effect, inject, signal } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
 import { PaquetesService } from '../../../../core/services/paquetes.service';
 import { Reserva } from '../../../../core/models/reserva.model';
 import { ImpactoClienteComponent } from '../../components/impacto-cliente/impacto-cliente.component';
@@ -23,6 +24,7 @@ import { EmptyStateComponent } from '../../../../core/components/empty-state/emp
     SucursalCardComponent,
     LoadingSpinnerComponent,
     EmptyStateComponent,
+    LucideAngularModule,
   ],
   templateUrl: './feed.component.html',
   styleUrl: './feed.component.css',

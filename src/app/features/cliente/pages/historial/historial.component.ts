@@ -1,4 +1,5 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
 import { ReservasService } from '../../../../core/services/reservas.service';
 import { Reserva } from '../../../../core/models/reserva.model';
 import { LoadingSpinnerComponent } from '../../../../core/components/loading-spinner/loading-spinner.component';
@@ -10,6 +11,7 @@ import { EmptyStateComponent } from '../../../../core/components/empty-state/emp
   imports: [
     LoadingSpinnerComponent,
     EmptyStateComponent,
+    LucideAngularModule,
   ],
   templateUrl: './historial.component.html',
   styleUrl: './historial.component.css',

@@ -102,6 +102,19 @@
             class="w-full rounded-lg border border-border px-4 py-3 text-text text-sm file:mr-4 file:rounded-lg file:border-0 file:bg-primary-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-700"
             [class.border-error]="isFieldInvalid('businessLicense')"
           />
+          @if (nombreArchivoLicense()) {
+            <p class="mt-1 flex items-center justify-between gap-2 rounded-lg bg-surface-alt px-3 py-2 text-xs text-text">
+              <span class="truncate">{{ nombreArchivoLicense() }}</span>
+              <button
+                type="button"
+                (click)="removerLicencia()"
+                aria-label="Quitar licencia"
+                class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-error/10 hover:text-error"
+              >
+                <lucide-icon name="x" size="14" />
+              </button>
+            </p>
+          }
           @if (isFieldInvalid('businessLicense')) {
             <p class="mt-1 text-sm text-error">La licencia comercial es obligatoria.</p>
           }
@@ -118,6 +131,19 @@
             (change)="onPhotoChange($event)"
             class="w-full rounded-lg border border-border px-4 py-3 text-text text-sm file:mr-4 file:rounded-lg file:border-0 file:bg-primary-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-700"
           />
+          @if (nombreArchivoPhoto()) {
+            <p class="mt-1 flex items-center justify-between gap-2 rounded-lg bg-surface-alt px-3 py-2 text-xs text-text">
+              <span class="truncate">{{ nombreArchivoPhoto() }}</span>
+              <button
+                type="button"
+                (click)="removerFoto()"
+                aria-label="Quitar foto"
+                class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-error/10 hover:text-error"
+              >
+                <lucide-icon name="x" size="14" />
+              </button>
+            </p>
+          }
         </div>
 
         <div class="flex justify-end pt-2">

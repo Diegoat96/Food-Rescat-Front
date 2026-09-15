@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
 import { FavoritosService } from '../../../../core/services/favoritos.service';
 
 @Component({
   selector: 'app-favorito-button',
   standalone: true,
+  imports: [LucideAngularModule],
   templateUrl: './favorito-button.component.html',
   styleUrl: './favorito-button.component.css',
 })

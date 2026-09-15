@@ -1,9 +1,11 @@
 import { Component, OnInit, computed, inject } from '@angular/core';
+import { LucideAngularModule } from 'lucide-angular';
 import { EstadisticasClienteService } from '../../../../core/services/estadisticas-cliente.service';
 
 @Component({
   selector: 'app-impacto-cliente',
   standalone: true,
+  imports: [LucideAngularModule],
   templateUrl: './impacto-cliente.component.html',
   styleUrl: './impacto-cliente.component.css',
 })
