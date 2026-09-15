@@ -23,16 +23,16 @@ export class InicioComponent implements OnInit {
       return [];
     }
     return [
-      { label: 'Paquetes activos', valor: String(k.paquetesActivos), icono: '📦' },
-      { label: 'Pendientes hoy', valor: String(k.pendientesHoy), icono: '⏳' },
+      { label: 'Paquetes activos', valor: String(k.activePackages ?? 0), icono: '📦' },
+      { label: 'Pendientes hoy', valor: String(k.pendingToday ?? 0), icono: '⏳' },
       {
         label: 'Kg rescatados hoy',
-        valor: `${Number(k.kgRescatadosHoy).toLocaleString('es-GT')} kg`,
+        valor: `${Number(k.kgRescuedToday ?? 0).toLocaleString('es-GT')} kg`,
         icono: '🥦',
       },
       {
         label: 'Ingresos esta semana',
-        valor: `Q${Number(k.ingresosSemana).toFixed(2)}`,
+        valor: `Q${Number(k.weeklyRevenue ?? 0).toFixed(2)}`,
         icono: '💰',
       },
     ];

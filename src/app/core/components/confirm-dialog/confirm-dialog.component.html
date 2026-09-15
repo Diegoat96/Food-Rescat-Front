@@ -1,0 +1,42 @@
+@if (visible) {
+  <div
+    role="dialog"
+    aria-modal="true"
+    [attr.aria-label]="title"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+    (mousedown)="onBackdrop($event)"
+  >
+    <div class="w-full max-w-sm rounded-2xl bg-surface p-6 shadow-2xl">
+      <div class="flex items-start justify-between">
+        <h2 class="text-xl font-extrabold text-text">{{ title }}</h2>
+        <button
+          type="button"
+          (click)="cancel.emit()"
+          class="flex h-8 w-8 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-surface-alt hover:text-text"
+          aria-label="Cerrar"
+        >
+          ✕
+        </button>
+      </div>
+
+      <p class="mt-2 text-sm text-text-muted">{{ message }}</p>
+
+      <div class="mt-6 flex gap-3">
+        <button
+          type="button"
+          (click)="cancel.emit()"
+          class="flex-1 rounded-lg bg-surface-alt px-4 py-3 text-sm font-bold text-text transition-colors hover:bg-border"
+        >
+          {{ cancelText }}
+        </button>
+        <button
+          type="button"
+          (click)="confirm.emit()"
+          class="flex-1 rounded-lg bg-error px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-error/90"
+        >
+          {{ confirmText }}
+        </button>
+      </div>
+    </div>
+  </div>
+}
