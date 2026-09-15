@@ -17,12 +17,12 @@ export class EstadisticasHoyComponent implements OnInit {
 
   readonly kgFormateado = computed(() => {
     const d = this.datos();
-    return d ? `${Number(d.kgRescatadosHoy).toLocaleString('es-GT')} kg` : '—';
+    return d ? `${Number(d.kgRescuedToday ?? 0).toLocaleString('es-GT')} kg` : '—';
   });
 
   readonly ingresosFormateado = computed(() => {
     const d = this.datos();
-    return d ? `Q${Number(d.ingresosHoy).toFixed(2)}` : '—';
+    return d ? `Q${Number(d.revenueToday ?? 0).toFixed(2)}` : '—';
   });
 
   ngOnInit(): void {

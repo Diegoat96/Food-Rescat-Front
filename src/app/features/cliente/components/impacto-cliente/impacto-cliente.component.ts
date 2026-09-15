@@ -22,9 +22,9 @@ export class ImpactoClienteComponent implements OnInit {
       ];
     }
     return [
-      { valor: d.totalRescates.toLocaleString('es-GT'), label: 'alimentos rescatados' },
-      { valor: `${d.kgEvitados.toLocaleString('es-GT')} kg`, label: 'de CO₂ evitado' },
-      { valor: `Q${d.totalAhorrado.toFixed(2)}`, label: 'ahorrados' },
+      { valor: (d.totalRescues ?? 0).toLocaleString('es-GT'), label: 'alimentos rescatados' },
+      { valor: `${(d.kgSaved ?? 0).toLocaleString('es-GT')} kg`, label: 'de CO₂ evitado' },
+      { valor: `Q${(d.totalSaved ?? 0).toFixed(2)}`, label: 'ahorrados' },
     ];
   });
 

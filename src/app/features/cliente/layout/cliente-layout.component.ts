@@ -1,14 +1,15 @@
-import { Component, DestroyRef, OnInit, inject } from '@angular/core';
+import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificacionesService } from '../../../core/services/notificaciones.service';
 import { FavoritosService } from '../../../core/services/favoritos.service';
 import { NotificacionesComponent } from '../components/notificaciones/notificaciones.component';
+import { ConfirmDialogComponent } from '../../../core/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-cliente-layout',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, NotificacionesComponent],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, NotificacionesComponent, ConfirmDialogComponent],
   templateUrl: './cliente-layout.component.html',
   styleUrl: './cliente-layout.component.css',
 })
@@ -19,6 +20,8 @@ export class ClienteLayoutComponent implements OnInit {
   private destroyRef = inject(DestroyRef);
 
   readonly usuario = this.authService.currentUser;
+
+  readonly mostrarConfirmacionLogout = signal(false);
 
   readonly navItems = [
     { path: '/cliente/feed', label: 'Feed', icon: '🍽️' },
@@ -35,7 +38,16 @@ export class ClienteLayoutComponent implements OnInit {
     this.destroyRef.onDestroy(() => clearInterval(id));
   }
 
-  logout(): void {
+  preguntarLogout(): void {
+    this.mostrarConfirmacionLogout.set(true);
+  }
+
+  confirmarLogout(): void {
+    this.mostrarConfirmacionLogout.set(false);
     this.authService.logout();
+  }
+
+  cancelarLogout(): void {
+    this.mostrarConfirmacionLogout.set(false);
   }
 }

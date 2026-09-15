@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable, finalize, tap } from 'rxjs';
 import { ApiService } from './api.service';
 import { EstadisticasCliente } from '../models/estadisticas-cliente.model';
 
@@ -15,8 +15,8 @@ export class EstadisticasClienteService {
     return this.api.get<EstadisticasCliente>('/customers/me/statistics').pipe(
       tap((data) => {
         this.datos.set(data);
-        this.cargando.set(false);
       }),
+      finalize(() => this.cargando.set(false)),
     );
   }
 }

@@ -1,13 +1,16 @@
-// TODO: Verificar campos exactos contra el Swagger del backend real.
-export interface RescateDiario {
-  fecha: string;
-  kg: number;
+export interface TopBranch {
+  branchId: string;
+  name: string;
+  completedReservations: number;
+}
+
+export interface PackageStatusCount {
+  status: string;
+  count: number;
 }
 
 export interface AdminEstadisticas {
-  totalUsuarios: number;
-  totalComercios: number;
-  totalRescates: number;
-  totalKgRescatados: number;
-  rescatadosUltimos7Dias: RescateDiario[];
+  kgRescuedTotal: number;
+  topBranches: TopBranch[];
+  packagesByStatus: PackageStatusCount[];
 }

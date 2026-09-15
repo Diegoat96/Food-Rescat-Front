@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable, finalize, tap } from 'rxjs';
 import { ApiService } from './api.service';
 import { EstadisticasHoy, EstadisticasKpis } from '../models/estadisticas.model';
 
@@ -18,8 +18,8 @@ export class EstadisticasService {
     return this.api.get<EstadisticasHoy>('/businesses/me/stats/today').pipe(
       tap((data) => {
         this.estadisticasHoy.set(data);
-        this.cargando.set(false);
       }),
+      finalize(() => this.cargando.set(false)),
     );
   }
 
@@ -28,8 +28,8 @@ export class EstadisticasService {
     return this.api.get<EstadisticasKpis>('/merchants/me/statistics/kpis').pipe(
       tap((data) => {
         this.kpis.set(data);
-        this.cargandoKpis.set(false);
       }),
+      finalize(() => this.cargandoKpis.set(false)),
     );
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, finalize, map, tap } from 'rxjs';
 import { ApiService } from './api.service';
 import { Usuario } from '../models/usuario.model';
 import { AdminEstadisticas } from '../models/admin-estadisticas.model';
@@ -24,8 +24,8 @@ export class AdminService {
       map((pag) => pag.data),
       tap((lista) => {
         this.usuarios.set(lista);
-        this.cargandoUsuarios.set(false);
       }),
+      finalize(() => this.cargandoUsuarios.set(false)),
     );
   }
 
@@ -34,8 +34,8 @@ export class AdminService {
     return this.api.get<AdminEstadisticas>('/admin/statistics').pipe(
       tap((data) => {
         this.estadisticas.set(data);
-        this.cargandoEstadisticas.set(false);
       }),
+      finalize(() => this.cargandoEstadisticas.set(false)),
     );
   }
 
@@ -57,8 +57,8 @@ export class AdminService {
       map((pag) => pag.data),
       tap((lista) => {
         this.solicitudes.set(lista);
-        this.cargandoSolicitudes.set(false);
       }),
+      finalize(() => this.cargandoSolicitudes.set(false)),
     );
   }
 
