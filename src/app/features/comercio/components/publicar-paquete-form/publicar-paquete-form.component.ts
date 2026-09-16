@@ -26,10 +26,10 @@ export class PublicarPaqueteFormComponent {
   readonly publicado = signal(false);
   readonly sucursales = this.sucursalesService.sucursales;
 
-  readonly horarios = [
-    '12:00', '13:00', '14:00', '15:00', '16:00',
-    '17:00', '18:00', '19:00', '20:00', '21:00', '22:00',
-  ];
+  // Genera automáticamente todas las horas del día de 00:00 a 23:00
+  readonly horarios: string[] = Array.from({ length: 24 }, (_, i) => {
+    return i.toString().padStart(2, '0') + ':00';
+  });
 
   readonly form: FormGroup = this.fb.group({
     name: ['', [Validators.required]],
