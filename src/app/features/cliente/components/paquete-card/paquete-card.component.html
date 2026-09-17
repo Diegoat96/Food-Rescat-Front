@@ -3,9 +3,17 @@
 >
   <!-- Imagen / favorito / badge -->
   <div class="relative h-36 bg-surface-alt">
-    <div class="flex h-full w-full items-center justify-center">
-      <lucide-icon [name]="iconoCategoria()" size="48" class="text-text-muted/60" />
-    </div>
+    @if (paquete.imageUrl) {
+      <img
+        [src]="paquete.imageUrl"
+        [alt]="paquete.name"
+        class="h-full w-full object-cover"
+      />
+    } @else {
+      <div class="flex h-full w-full items-center justify-center">
+        <lucide-icon [name]="iconoCategoria()" size="48" class="text-text-muted/60" />
+      </div>
+    }
     @if (paquete.branch?.id) {
       <div class="absolute right-3 top-3">
         <app-favorito-button [branchId]="paquete.branch!.id" />
@@ -24,6 +32,15 @@
     </p>
     @if (paquete.branch?.city) {
       <p class="text-xs text-text-muted">{{ paquete.branch?.city }}</p>
+    }
+
+    @if (paquete.description?.trim()) {
+      <p
+        title="{{ paquete.description }}"
+        class="mt-2 line-clamp-3 whitespace-pre-line text-sm text-text"
+      >
+        {{ paquete.description }}
+      </p>
     }
 
     <!-- Precio -->
@@ -52,6 +69,114 @@
       </p>
       <span class="text-xs text-text-muted"> {{ paquete.quantity }} disponible </span>
     </div>
+
+    <!-- Valoración del post -->
+    @if (totalResenas() > 0) {
+      <div class="mt-3 flex items-center gap-1.5">
+        <div class="flex items-center gap-0.5">
+          @for (e of estrellas; track e) {
+            <span
+              class="text-sm"
+              [class.text-amber-400]="estrellaActiva(e)"
+              [class.text-border]="!estrellaActiva(e)"
+            >★</span>
+          }
+        </div>
+        <span class="text-xs font-semibold text-text">{{ promedio() }}</span>
+        <span class="text-xs text-text-muted">({{ totalResenas() }})</span>
+      </div>
+    }
+
+    <!-- Reseñas y calificación -->
+    <div class="mt-3">
+      <button
+        type="button"
+        (click)="alternarResenas()"
+        class="text-sm font-semibold text-primary-600 hover:text-primary-700"
+      >
+        {{ verResenas() ? 'Ocultar reseñas' : 'Ver reseñas' }}
+      </button>
+
+      @if (verResenas()) {
+        <div class="mt-2 space-y-2">
+          @if (cargandoResenas()) {
+            <p class="text-xs text-text-muted">Cargando reseñas…</p>
+          } @else if (errorResenas()) {
+            <p class="text-xs font-semibold text-error">{{ errorResenas() }}</p>
+          } @else {
+            @if ((resenas()?.ratings?.length ?? 0) === 0) {
+              <p class="text-xs text-text-muted">Aún no hay reseñas para este paquete.</p>
+            } @else {
+              @for (r of resenas()?.ratings ?? []; track r.id) {
+                <div class="rounded-lg border border-border bg-surface-alt p-2">
+                  <div class="flex items-center justify-between gap-2">
+                    <span class="text-xs font-bold text-text">{{ r.client?.name ?? 'Cliente' }}</span>
+                    <span class="flex shrink-0 items-center">
+                      @for (e of estrellas; track e) {
+                        <span
+                          class="text-xs"
+                          [class.text-amber-400]="r.score >= e"
+                          [class.text-border]="r.score < e"
+                        >★</span>
+                      }
+                    </span>
+                  </div>
+                  @if (r.comment) {
+                    <p class="mt-1 text-xs text-text">{{ r.comment }}</p>
+                  }
+                </div>
+              }
+            }
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Calificar este post -->
+    @if (esCliente()) {
+      @if (!resenado()) {
+        <div class="mt-3 rounded-xl border border-border bg-surface-alt p-3">
+          <p class="text-sm font-bold text-text">Califica este paquete</p>
+          <div class="mt-2 flex items-center gap-1">
+            @for (e of estrellas; track e) {
+              <button
+                type="button"
+                (click)="seleccionarPuntuacion(e)"
+                class="text-2xl transition-transform hover:scale-110"
+                [class.text-amber-400]="miPuntuacion() >= e"
+                [class.text-border]="miPuntuacion() < e"
+                aria-label="Calificar con {{ e }} estrellas"
+              >★</button>
+            }
+            <span class="ml-1 text-xs text-text-muted">
+              {{ miPuntuacion() > 0 ? miPuntuacion() + ' de 5 estrellas' : 'Toca para calificar' }}
+            </span>
+          </div>
+          <textarea
+            rows="2"
+            [value]="miComentario()"
+            (input)="onMiComentario($event)"
+            placeholder="Cuéntanos qué te pareció la comida… (opcional)"
+            class="mt-2 w-full resize-none rounded-lg border border-border bg-surface px-3 py-2 text-sm text-text focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+          ></textarea>
+          @if (miError()) {
+            <p class="mt-2 text-xs font-semibold text-error">{{ miError() }}</p>
+          }
+          <button
+            type="button"
+            (click)="enviarMiResena()"
+            [disabled]="miGuardando()"
+            class="mt-2 rounded-lg bg-primary-600 px-4 py-2 text-xs font-bold text-white transition-colors hover:bg-primary-700 disabled:cursor-not-allowed disabled:opacity-60"
+          >
+            {{ miGuardando() ? 'Enviando…' : 'Enviar reseña' }}
+          </button>
+        </div>
+      } @else {
+        <p class="mt-3 rounded-xl border border-primary-200 bg-primary-50 px-3 py-2 text-xs font-semibold text-primary-700">
+          ¡Gracias por calificar este paquete!
+        </p>
+      }
+    }
 
     <!-- Selector de método de pago -->
     <div class="mt-3">
