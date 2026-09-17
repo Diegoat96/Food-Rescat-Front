@@ -39,7 +39,7 @@
       }
     </div>
 
-    <!-- Categoría (Etiqueta duplicada eliminada) -->
+    <!-- Categoría -->
     <div>
       <app-categoria-select formControlName="categoryId" />
     </div>
@@ -158,10 +158,22 @@
     </div>
   </div>
 
-  <!-- Preview de descuento en vivo -->
-  <p class="rounded-lg bg-primary-50 px-4 py-3 text-sm font-semibold text-primary-700">
-    {{ preview() }}
-  </p>
+  <!-- Preview de descuento en vivo con colores dinámicos (Rojo, Amarillo o Verde) -->
+  @let state = previewState();
+  <div
+    class="rounded-lg px-4 py-3 text-sm font-semibold border transition-colors"
+    [class.bg-error-50]="state.tipo === 'error'"
+    [class.border-error-200]="state.tipo === 'error'"
+    [class.text-error]="state.tipo === 'error'"
+    [class.bg-amber-50]="state.tipo === 'warning'"
+    [class.border-amber-200]="state.tipo === 'warning'"
+    [class.text-amber-800]="state.tipo === 'warning'"
+    [class.bg-primary-50]="state.tipo === 'success' || state.tipo === 'info'"
+    [class.border-primary-200]="state.tipo === 'success' || state.tipo === 'info'"
+    [class.text-primary-700]="state.tipo === 'success' || state.tipo === 'info'"
+  >
+    {{ state.texto }}
+  </div>
 
   <div class="flex items-center justify-end gap-3 pt-1">
     @if (sucursales().length === 0) {
