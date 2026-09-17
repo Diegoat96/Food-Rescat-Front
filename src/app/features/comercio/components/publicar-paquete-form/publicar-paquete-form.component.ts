@@ -1,6 +1,7 @@
 import { Component, Input, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { LucideAngularModule } from 'lucide-angular';
 import { CategoriaSelectComponent } from '../categoria-select/categoria-select.component';
 import { CategoriasService } from '../../../../core/services/categorias.service';
 import { SucursalesService } from '../../../../core/services/sucursales.service';
@@ -27,7 +28,7 @@ function validarPrecios(control: AbstractControl): ValidationErrors | null {
 @Component({
   selector: 'app-publicar-paquete-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CategoriaSelectComponent],
+  imports: [ReactiveFormsModule, CategoriaSelectComponent, LucideAngularModule],
   templateUrl: './publicar-paquete-form.component.html',
   styleUrl: './publicar-paquete-form.component.css',
 })
@@ -88,7 +89,7 @@ export class PublicarPaqueteFormComponent {
       }
       if (descuento === 0) {
         return { 
-          texto: `🎁 ¡Este paquete se ofrecerá como DONACIÓN (Gratis para el cliente) valorado originalmente en Q${original}!`, 
+          texto: `¡Este paquete se ofrecerá como DONACIÓN (Gratis para el cliente) valorado originalmente en Q${original}!`, 
           tipo: 'warning' 
         };
       }

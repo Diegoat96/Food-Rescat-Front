@@ -206,7 +206,7 @@
   <!-- Preview de descuento en vivo con colores dinámicos (Rojo, Amarillo o Verde) -->
   @let state = previewState();
   <div
-    class="rounded-lg px-4 py-3 text-sm font-semibold border transition-colors"
+    class="flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-semibold border transition-colors"
     [class.bg-error-50]="state.tipo === 'error'"
     [class.border-error-200]="state.tipo === 'error'"
     [class.text-error]="state.tipo === 'error'"
@@ -217,7 +217,10 @@
     [class.border-primary-200]="state.tipo === 'success' || state.tipo === 'info'"
     [class.text-primary-700]="state.tipo === 'success' || state.tipo === 'info'"
   >
-    {{ state.texto }}
+    @if (state.tipo === 'warning') {
+      <lucide-icon name="gift" size="18" class="shrink-0" />
+    }
+    <span>{{ state.texto }}</span>
   </div>
 
   <div class="flex items-center justify-end gap-3 pt-1">
