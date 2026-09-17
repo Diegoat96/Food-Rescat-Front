@@ -45,6 +45,29 @@
     </div>
   </div>
 
+  <!-- Sucursal que publica -->
+  @if (sucursales().length > 0) {
+    <div>
+      <label for="sucursal" class="mb-1 block text-sm font-medium text-text"> Sucursal </label>
+      <select
+        id="sucursal"
+        formControlName="sucursal"
+        class="w-full rounded-lg border border-border bg-surface px-4 py-3 text-text focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+        [class.border-error]="isFieldInvalid('sucursal')"
+      >
+        @if (sucursales().length > 1) {
+          <option value="" disabled>Selecciona una sucursal…</option>
+        }
+        @for (s of sucursales(); track s.id) {
+          <option [value]="s.id">{{ s.name }}{{ s.city ? ' · ' + s.city : '' }}</option>
+        }
+      </select>
+      @if (isFieldInvalid('sucursal')) {
+        <p class="mt-1 text-sm text-error">Elige la sucursal que hará la publicación.</p>
+      }
+    </div>
+  }
+
   <!-- Descripción -->
   @if (variante === 'grande') {
     <div>

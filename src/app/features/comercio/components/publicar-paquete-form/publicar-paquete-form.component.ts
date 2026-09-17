@@ -55,6 +55,7 @@ export class PublicarPaqueteFormComponent {
     name: ['', [Validators.required]],
     description: [''],
     categoryId: ['', [Validators.required]],
+    sucursal: ['', [Validators.required]],
     quantity: [1, [Validators.required, Validators.min(1)]],
     pickupDeadline: ['', [Validators.required]],
     originalPrice: ['', [Validators.required, Validators.min(0.1)]],
@@ -69,6 +70,14 @@ export class PublicarPaqueteFormComponent {
     this.categoriasService.cargar().subscribe();
     this.sucursalesService.cargar().subscribe();
   }
+
+  // Si el comercio tiene una sola sucursal la preselecciona automáticamente.
+  readonly sucursalAutomatica = effect(() => {
+    const lista = this.sucursales();
+    if (lista.length === 1 && !this.form.get('sucursal')?.value) {
+      this.form.patchValue({ sucursal: lista[0].id });
+    }
+  });
 
   // Objeto computado que devuelve el mensaje y el tipo de alerta ('error' | 'warning' | 'success' | 'info')
   readonly previewState = computed(() => {
@@ -162,8 +171,8 @@ export class PublicarPaqueteFormComponent {
       this.form.markAllAsTouched();
       return;
     }
-    const sucursal = this.sucursales()[0];
-    if (!sucursal) {
+    const sucursalId = this.form.get('sucursal')?.value;
+    if (!sucursalId) {
       return;
     }
     const original = Number(this.form.get('originalPrice')?.value) || 0;
@@ -176,7 +185,7 @@ export class PublicarPaqueteFormComponent {
       formData.append('description', descripcion);
     }
     formData.append('categoryId', this.form.get('categoryId')?.value);
-    formData.append('branchId', sucursal.id);
+    formData.append('branchId', sucursalId);
     formData.append('quantity', String(this.form.get('quantity')?.value ?? 1));
     formData.append(
       'pickupDeadline',
