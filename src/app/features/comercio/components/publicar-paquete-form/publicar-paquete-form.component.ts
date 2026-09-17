@@ -1,10 +1,28 @@
 import { Component, Input, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { CategoriaSelectComponent } from '../categoria-select/categoria-select.component';
 import { CategoriasService } from '../../../../core/services/categorias.service';
 import { SucursalesService } from '../../../../core/services/sucursales.service';
 import { PaquetesService } from '../../../../core/services/paquetes.service';
+
+// Validador personalizado para asegurar coherencia en los precios
+function validarPrecios(control: AbstractControl): ValidationErrors | null {
+  const original = Number(control.get('originalPrice')?.value);
+  const descuento = Number(control.get('discountedPrice')?.value);
+  
+  if (Number.isFinite(original) && Number.isFinite(descuento)) {
+    // Si el descuento es mayor que el precio original -> Error
+    if (descuento > original) {
+      return { descuentoMayor: true };
+    }
+    // Si el descuento es negativo -> Error
+    if (descuento < 0) {
+      return { descuentoNegativo: true };
+    }
+  }
+  return null;
+}
 
 @Component({
   selector: 'app-publicar-paquete-form',
@@ -28,7 +46,6 @@ export class PublicarPaqueteFormComponent {
   readonly imagenPreview = signal<string | null>(null);
   readonly errorImagen = signal<string | null>(null);
 
-  // Genera automáticamente todas las horas del día de 00:00 a 23:00
   readonly horarios: string[] = Array.from({ length: 24 }, (_, i) => {
     return i.toString().padStart(2, '0') + ':00';
   });
@@ -39,9 +56,9 @@ export class PublicarPaqueteFormComponent {
     categoryId: ['', [Validators.required]],
     quantity: [1, [Validators.required, Validators.min(1)]],
     pickupDeadline: ['', [Validators.required]],
-    originalPrice: [''],
-    discountedPrice: [''],
-  });
+    originalPrice: ['', [Validators.required, Validators.min(0.1)]],
+    discountedPrice: [0, [Validators.required, Validators.min(0)]], // Permite 0 para donaciones
+  }, { validators: validarPrecios });
 
   private readonly formValues = toSignal(this.form.valueChanges, {
     initialValue: this.form.value,
@@ -52,14 +69,38 @@ export class PublicarPaqueteFormComponent {
     this.sucursalesService.cargar().subscribe();
   }
 
-  readonly preview = computed(() => {
+  // Objeto computado que devuelve el mensaje y el tipo de alerta ('error' | 'warning' | 'success' | 'info')
+  readonly previewState = computed(() => {
     const valores = this.formValues();
     const original = Number(valores?.originalPrice);
     const descuento = Number(valores?.discountedPrice);
-    if (Number.isFinite(original) && Number.isFinite(descuento) && original > 0 && descuento > 0) {
-      return `El cliente paga Q${descuento} en lugar de Q${original}`;
+
+    if (isNaN(original) && isNaN(descuento)) {
+      return { texto: 'Ingresa los precios para ver el descuento en vivo.', tipo: 'info' };
     }
-    return 'Ingresa los precios para ver el descuento en vivo.';
+
+    if (Number.isFinite(original) && Number.isFinite(descuento)) {
+      if (descuento > original) {
+        return { 
+          texto: '⚠️ El precio con descuento no puede ser mayor que el precio normal.', 
+          tipo: 'error' 
+        };
+      }
+      if (descuento === 0) {
+        return { 
+          texto: `🎁 ¡Este paquete se ofrecerá como DONACIÓN (Gratis para el cliente) valorado originalmente en Q${original}!`, 
+          tipo: 'warning' 
+        };
+      }
+      if (descuento > 0 && original > 0) {
+        return { 
+          texto: `El cliente paga Q${descuento} en lugar de Q${original}`, 
+          tipo: 'success' 
+        };
+      }
+    }
+
+    return { texto: 'Ingresa precios válidos.', tipo: 'info' };
   });
 
   ajustarStock(delta: number): void {
@@ -125,7 +166,7 @@ export class PublicarPaqueteFormComponent {
       return;
     }
     const original = Number(this.form.get('originalPrice')?.value) || 0;
-    const descuento = Number(this.form.get('discountedPrice')?.value) || 0;
+    const descuento = Number(this.form.get('discountedPrice')?.value) ?? 0;
 
     const formData = new FormData();
     formData.append('name', this.form.get('name')?.value ?? '');

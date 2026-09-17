@@ -26,7 +26,8 @@ export class TablaEntregasComponent implements OnInit {
   }
 
   horaRecogida(reserva: Reserva): string {
-    const raw = reserva.pickupDeadline;
+    // Buscamos dentro de package, ya que el backend lo manda anidado ahí
+    const raw = (reserva as any).package?.pickupDeadline || reserva.pickupDeadline;
     if (!raw) return '—';
 
     // Si viene en formato simple "HH:mm" o "HH:mm:ss"
