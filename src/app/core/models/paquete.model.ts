@@ -1,4 +1,5 @@
 import { EstadoPaquete } from './estado-paquete.enum';
+import { TipoComercio } from './sucursal.model';
 
 export interface Paquete {
   id: string;
@@ -13,7 +14,7 @@ export interface Paquete {
     city?: string;
     // Tipo de comercio de la sucursal (ver TipoComercio). Contrato confirmado
     // con backend: GET /packages incluye branch.businessType.
-    businessType?: string;
+    businessType?: TipoComercio;
   } | null;
   quantity: number;
   pickupDeadline: string;
@@ -54,12 +55,3 @@ export interface PaquetesDeMiComercioQuery {
   skip?: number;
   take?: number;
 }
-
-// Tipo de comercio de la sucursal. Contrato confirmado con backend:
-// CAFETERIA | RESTAURANTE | PANADERIA | COMIDA_RAPIDA | OTRO.
-export type TipoComercio =
-  | 'CAFETERIA'
-  | 'RESTAURANTE'
-  | 'PANADERIA'
-  | 'COMIDA_RAPIDA'
-  | 'OTRO';
