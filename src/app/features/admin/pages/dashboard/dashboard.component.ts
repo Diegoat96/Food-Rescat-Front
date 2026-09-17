@@ -9,11 +9,12 @@ import { LoadingSpinnerComponent } from '../../../../core/components/loading-spi
 import { EmptyStateComponent } from '../../../../core/components/empty-state/empty-state.component';
 import { ConfirmDialogComponent } from '../../../../core/components/confirm-dialog/confirm-dialog.component';
 import { VerDocumentoModalComponent } from '../../../../core/components/ver-documento-modal/ver-documento-modal.component';
+import { RechazarSolicitudModalComponent } from '../../../../core/components/rechazar-solicitud-modal/rechazar-solicitud-modal.component';
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [LoadingSpinnerComponent, EmptyStateComponent, ConfirmDialogComponent, LucideAngularModule, VerDocumentoModalComponent],
+  imports: [LoadingSpinnerComponent, EmptyStateComponent, ConfirmDialogComponent, LucideAngularModule, VerDocumentoModalComponent, RechazarSolicitudModalComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
@@ -32,6 +33,7 @@ export class AdminDashboardComponent implements OnInit {
   readonly cargandoSolicitudes = this.adminService.cargandoSolicitudes;
   readonly filtroSolicitud = signal<string>('');
   readonly documento = signal<{ url: string; titulo: string } | null>(null);
+  readonly solicitudARechazar = signal<BusinessRequest | null>(null);
 
   readonly rolSeleccionado = signal<'TODOS' | Rol>('TODOS');
   readonly Rol = Rol;
@@ -108,11 +110,20 @@ export class AdminDashboardComponent implements OnInit {
     this.adminService.aprobarSolicitud(id).subscribe();
   }
 
-  rechazar(id: string): void {
-    const reason = prompt('Motivo del rechazo:');
-    if (reason !== null && reason.trim()) {
-      this.adminService.rechazarSolicitud(id, reason.trim()).subscribe();
+  rechazar(solicitud: BusinessRequest): void {
+    this.solicitudARechazar.set(solicitud);
+  }
+
+  confirmarRechazo(reason: string): void {
+    const solicitud = this.solicitudARechazar();
+    this.solicitudARechazar.set(null);
+    if (solicitud) {
+      this.adminService.rechazarSolicitud(solicitud.id, reason).subscribe();
     }
+  }
+
+  cancelarRechazo(): void {
+    this.solicitudARechazar.set(null);
   }
 
   verDocumento(solicitud: BusinessRequest, tipo: 'licencia' | 'foto'): void {
