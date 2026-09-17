@@ -41,7 +41,6 @@
 
     <!-- Categoría -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-text">Categoría</label>
       <app-categoria-select formControlName="categoryId" />
     </div>
   </div>
@@ -59,6 +58,51 @@
       ></textarea>
     </div>
   }
+
+  <!-- Foto del paquete -->
+  <div>
+    <label for="image" class="mb-1 block text-sm font-medium text-text">
+      Foto del paquete (opcional)
+    </label>
+    <div
+      class="flex items-start gap-4 rounded-lg border border-border p-3"
+      [class.border-error]="errorImagen()"
+    >
+      @if (imagenPreview()) {
+        <div class="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg">
+          <img
+            [src]="imagenPreview()"
+            alt="Vista previa del paquete"
+            class="h-full w-full object-cover"
+          />
+        </div>
+      }
+      <div class="flex-1 space-y-2">
+        <input
+          id="image"
+          #imagenInput
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          (change)="onImagenSeleccionada($event)"
+          class="w-full text-sm text-text-muted file:mr-4 file:rounded-lg file:border-0 file:bg-primary-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-700"
+        />
+        @if (imagenFile()) {
+          <button
+            type="button"
+            (click)="quitarImagen(imagenInput)"
+            class="text-sm font-semibold text-error hover:text-error/80"
+          >
+            Quitar imagen
+          </button>
+        }
+        @if (errorImagen()) {
+          <p class="text-sm font-semibold text-error">{{ errorImagen() }}</p>
+        } @else {
+          <p class="text-xs text-text-muted">JPG, PNG o WebP · máximo 5 MB.</p>
+        }
+      </div>
+    </div>
+  </div>
 
   <!-- Stepper quantity -->
   <div>
@@ -159,10 +203,22 @@
     </div>
   </div>
 
-  <!-- Preview de descuento en vivo -->
-  <p class="rounded-lg bg-primary-50 px-4 py-3 text-sm font-semibold text-primary-700">
-    {{ preview() }}
-  </p>
+  <!-- Preview de descuento en vivo con colores dinámicos (Rojo, Amarillo o Verde) -->
+  @let state = previewState();
+  <div
+    class="rounded-lg px-4 py-3 text-sm font-semibold border transition-colors"
+    [class.bg-error-50]="state.tipo === 'error'"
+    [class.border-error-200]="state.tipo === 'error'"
+    [class.text-error]="state.tipo === 'error'"
+    [class.bg-amber-50]="state.tipo === 'warning'"
+    [class.border-amber-200]="state.tipo === 'warning'"
+    [class.text-amber-800]="state.tipo === 'warning'"
+    [class.bg-primary-50]="state.tipo === 'success' || state.tipo === 'info'"
+    [class.border-primary-200]="state.tipo === 'success' || state.tipo === 'info'"
+    [class.text-primary-700]="state.tipo === 'success' || state.tipo === 'info'"
+  >
+    {{ state.texto }}
+  </div>
 
   <div class="flex items-center justify-end gap-3 pt-1">
     @if (sucursales().length === 0) {

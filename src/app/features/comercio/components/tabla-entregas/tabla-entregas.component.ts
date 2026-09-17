@@ -26,11 +26,22 @@ export class TablaEntregasComponent implements OnInit {
   }
 
   horaRecogida(reserva: Reserva): string {
-    const fecha = new Date(reserva.pickupDeadline ?? '');
-    if (Number.isNaN(fecha.getTime())) {
-      return '—';
+    // Buscamos dentro de package, ya que el backend lo manda anidado ahí
+    const raw = (reserva as any).package?.pickupDeadline || reserva.pickupDeadline;
+    if (!raw) return '—';
+
+    // Si viene en formato simple "HH:mm" o "HH:mm:ss"
+    if (/^\d{2}:\d{2}(:\d{2})?$/.test(raw)) {
+      return raw.slice(0, 5) + ' hrs';
     }
-    return fecha.toLocaleTimeString('es-GT', { hour: '2-digit', minute: '2-digit' });
+
+    // Si viene como fecha ISO estándar
+    const fecha = new Date(raw);
+    if (!Number.isNaN(fecha.getTime())) {
+      return fecha.toLocaleTimeString('es-GT', { hour: '2-digit', minute: '2-digit' }) + ' hrs';
+    }
+
+    return raw;
   }
 
   badge(reserva: Reserva): { bag: string; texto: string } {
