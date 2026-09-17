@@ -38,3 +38,10 @@ export interface PaquetesQuery {
   skip?: number;
   take?: number;
 }
+
+export interface PaquetesDeMiComercioQuery {
+  branchId?: string;
+  status?: EstadoPaquete;
+  skip?: number;
+  take?: number;
+}
