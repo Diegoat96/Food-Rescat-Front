@@ -1,7 +1,7 @@
 import { Injectable, signal } from '@angular/core';
 import { Observable, map, tap } from 'rxjs';
 import { ApiService } from './api.service';
-import { Paquete, PaqueteRequest, PaquetesQuery } from '../models/paquete.model';
+import { Paquete, PaquetesQuery } from '../models/paquete.model';
 import { PaginatedData } from '../models/paginated-data.model';
 
 @Injectable({ providedIn: 'root' })
@@ -26,7 +26,7 @@ export class PaquetesService {
     return this.api.get<Paquete>(`/packages/${id}`);
   }
 
-  crear(data: PaqueteRequest): Observable<Paquete> {
+  crear(data: FormData): Observable<Paquete> {
     return this.api.post<Paquete>('/packages', data).pipe(
       tap((nuevo) => {
         this.paquetes.update((lista) =>

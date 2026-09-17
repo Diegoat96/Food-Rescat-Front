@@ -1,7 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { Valoracion, ValoracionRequest } from '../models/valoracion.model';
+import {
+  MiReservaCalificable,
+  Valoracion,
+  ValoracionRequest,
+  ValoracionesPaquete,
+} from '../models/valoracion.model';
 
 @Injectable({ providedIn: 'root' })
 export class ValoracionesService {
@@ -11,8 +16,13 @@ export class ValoracionesService {
     return this.api.post<Valoracion>('/ratings', data);
   }
 
-  // TODO: Endpoint GET /ratings/reserva/:id no confirmado en backend.
-  obtenerDeReserva(reservationId: string): Observable<Valoracion> {
-    return this.api.get<Valoracion>(`/ratings/reservation/${reservationId}`);
+  dePaquete(packageId: string): Observable<ValoracionesPaquete> {
+    return this.api.get<ValoracionesPaquete>(`/packages/${packageId}/ratings`);
+  }
+
+  miReservaCalificable(packageId: string): Observable<MiReservaCalificable> {
+    return this.api.get<MiReservaCalificable>(
+      `/ratings/me/package/${packageId}`,
+    );
   }
 }

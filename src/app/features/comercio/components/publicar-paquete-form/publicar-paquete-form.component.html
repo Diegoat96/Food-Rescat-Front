@@ -59,6 +59,51 @@
     </div>
   }
 
+  <!-- Foto del paquete -->
+  <div>
+    <label for="image" class="mb-1 block text-sm font-medium text-text">
+      Foto del paquete (opcional)
+    </label>
+    <div
+      class="flex items-start gap-4 rounded-lg border border-border p-3"
+      [class.border-error]="errorImagen()"
+    >
+      @if (imagenPreview()) {
+        <div class="relative h-24 w-24 shrink-0 overflow-hidden rounded-lg">
+          <img
+            [src]="imagenPreview()"
+            alt="Vista previa del paquete"
+            class="h-full w-full object-cover"
+          />
+        </div>
+      }
+      <div class="flex-1 space-y-2">
+        <input
+          id="image"
+          #imagenInput
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          (change)="onImagenSeleccionada($event)"
+          class="w-full text-sm text-text-muted file:mr-4 file:rounded-lg file:border-0 file:bg-primary-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-primary-700"
+        />
+        @if (imagenFile()) {
+          <button
+            type="button"
+            (click)="quitarImagen(imagenInput)"
+            class="text-sm font-semibold text-error hover:text-error/80"
+          >
+            Quitar imagen
+          </button>
+        }
+        @if (errorImagen()) {
+          <p class="text-sm font-semibold text-error">{{ errorImagen() }}</p>
+        } @else {
+          <p class="text-xs text-text-muted">JPG, PNG o WebP · máximo 5 MB.</p>
+        }
+      </div>
+    </div>
+  </div>
+
   <!-- Stepper quantity -->
   <div>
     <label class="mb-1 block text-sm font-medium text-text"> Cantidad de stock </label>
