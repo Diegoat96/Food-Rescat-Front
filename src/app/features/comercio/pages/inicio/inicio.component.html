@@ -49,28 +49,34 @@
     }
   </section>
 
-  <!-- Últimas publicaciones (mock) -->
+  <!-- Últimas publicaciones (datos reales de GET /merchants/me/packages) -->
   <section class="rounded-2xl border border-border bg-surface p-5">
     <h3 class="mb-4 text-sm font-bold uppercase tracking-wide text-text-muted">
       Últimas publicaciones
     </h3>
     <div class="divide-y divide-border">
-      @for (u of ultimas; track u.titulo) {
-        <div class="flex items-center justify-between py-3">
-          <div>
-            <p class="font-semibold text-text">{{ u.titulo }}</p>
-            <p class="text-sm text-text-muted">{{ u.categoria }} · {{ u.hora }}</p>
+      @if (ultimas().length === 0) {
+        <p class="py-4 text-sm text-text-muted">Aún no hay publicaciones.</p>
+      } @else {
+        @for (u of ultimas(); track u.titulo) {
+          <div class="flex items-center justify-between py-3">
+            <div>
+              <p class="font-semibold text-text">{{ u.titulo }}</p>
+              <p class="text-sm text-text-muted">{{ u.categoria }} · {{ u.hora }}</p>
+            </div>
+            <span
+              class="rounded-full px-2.5 py-1 text-xs font-medium"
+              [class.bg-primary-100]="u.estado === 'Activo'"
+              [class.text-primary-700]="u.estado === 'Activo'"
+              [class.bg-secondary-100]="u.estado === 'Pendiente'"
+              [class.text-secondary-700]="u.estado === 'Pendiente'"
+              [class.bg-surface-alt]="u.estado !== 'Activo' && u.estado !== 'Pendiente'"
+              [class.text-text-muted]="u.estado !== 'Activo' && u.estado !== 'Pendiente'"
+            >
+              {{ u.estado }}
+            </span>
           </div>
-          <span
-            class="rounded-full px-2.5 py-1 text-xs font-medium"
-            [class.bg-primary-100]="u.estado === 'Activo'"
-            [class.text-primary-700]="u.estado === 'Activo'"
-            [class.bg-secondary-100]="u.estado === 'Pendiente'"
-            [class.text-secondary-700]="u.estado === 'Pendiente'"
-          >
-            {{ u.estado }}
-          </span>
-        </div>
+        }
       }
     </div>
   </section>
