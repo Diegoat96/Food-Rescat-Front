@@ -44,8 +44,13 @@ export class FeedComponent {
     const texto = this.busqueda().trim().toLowerCase();
     const cat = this.seleccionCategoria();
     return this.paquetes().filter((p) => {
+      // Filtra por tipo de comercio de la sucursal (no por categoría de producto).
+      // TODO(backend): confirmar el campo exacto del contrato (se asume
+      // paquete.branch.businessType con valores CAFETERIA/RESTAURANTE/PANADERIA/
+      // COMIDA_RAPIDA/OTRO). Mientras el backend no lo exponga, los chips que no
+      // sean "Todo" no matchean (comportamiento igual al bug actual).
       const matchCat =
-        cat === 'Todo' || (p.category?.name ?? '').toLowerCase() === cat.toLowerCase();
+        cat === 'Todo' || (p.branch?.businessType ?? '') === cat;
       const matchTexto =
         texto === '' || `${p.name} ${p.branch?.name ?? ''}`.toLowerCase().includes(texto);
       return matchCat && matchTexto;

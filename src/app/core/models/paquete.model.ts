@@ -6,7 +6,15 @@ export interface Paquete {
   description?: string;
   imageUrl?: string;
   category: { id: string; name: string } | null;
-  branch: { id: string; name: string; address: string; city?: string } | null;
+  branch: {
+    id: string;
+    name: string;
+    address: string;
+    city?: string;
+    // Tipo de comercio de la sucursal (CAFETERIA, RESTAURANTE, PANADERIA,
+    // COMIDA_RAPIDA, OTRO). Contrato esperado con backend; aún no confirmado.
+    businessType?: string;
+  } | null;
   quantity: number;
   pickupDeadline: string;
   originalPrice: number | null;

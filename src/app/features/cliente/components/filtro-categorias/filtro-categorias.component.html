@@ -1,18 +1,18 @@
 <div class="flex flex-wrap gap-2">
-  @for (chip of chips; track chip) {
+  @for (chip of chips; track chip.value) {
     <button
       type="button"
       (click)="seleccionar(chip)"
       class="rounded-full border px-4 py-2 text-sm font-semibold transition-colors"
-      [class.border-primary-600]="seleccion() === chip"
-      [class.bg-primary-600]="seleccion() === chip"
-      [class.text-white]="seleccion() === chip"
-      [class.border-border]="seleccion() !== chip"
-      [class.bg-surface]="seleccion() !== chip"
-      [class.text-text-muted]="seleccion() !== chip"
-      [class.hover:border-primary-400]="seleccion() !== chip"
+      [class.border-primary-600]="seleccion() === chip.value"
+      [class.bg-primary-600]="seleccion() === chip.value"
+      [class.text-white]="seleccion() === chip.value"
+      [class.border-border]="seleccion() !== chip.value"
+      [class.bg-surface]="seleccion() !== chip.value"
+      [class.text-text-muted]="seleccion() !== chip.value"
+      [class.hover:border-primary-400]="seleccion() !== chip.value"
     >
-      {{ chip }}
+      {{ chip.label }}
     </button>
   }
 </div>
