@@ -1,17 +1,13 @@
 import { Component, input, output } from '@angular/core';
-import { TipoComercio } from '../../../../core/models/paquete.model';
+import { TipoComercio, TIPOS_COMERCIO_LABELS } from '../../../../core/models/sucursal.model';
 
 // Tipo de comercio de la sucursal, expuesto por el backend en
 // paquete.branch.businessType (contrato confirmado). Los valores coinciden con
 // el enum BusinessType del backend: CAFETERIA, RESTAURANTE, PANADERIA,
 // COMIDA_RAPIDA, OTRO.
-export const TIPOS_COMERCIO: { value: TipoComercio; label: string }[] = [
-  { value: 'CAFETERIA', label: 'Cafetería' },
-  { value: 'RESTAURANTE', label: 'Restaurante' },
-  { value: 'PANADERIA', label: 'Panadería' },
-  { value: 'COMIDA_RAPIDA', label: 'Comida rápida' },
-  { value: 'OTRO', label: 'Otro' },
-];
+export const TIPOS_COMERCIO: { value: TipoComercio; label: string }[] = (
+  Object.keys(TIPOS_COMERCIO_LABELS) as TipoComercio[]
+).map((value) => ({ value, label: TIPOS_COMERCIO_LABELS[value] }));
 
 export const CATEGORIAS_CHIPS = [
   { value: 'Todo', label: 'Todo' },

@@ -32,6 +32,26 @@
   </div>
 
   <div>
+    <label for="businessType" class="mb-1 block text-sm font-medium text-text">
+      Tipo de comercio
+    </label>
+    <select
+      id="businessType"
+      formControlName="businessType"
+      class="w-full rounded-lg border border-border bg-surface px-4 py-3 text-text focus:border-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-500/20 transition-colors"
+      [class.border-error]="isFieldInvalid('businessType')"
+    >
+      <option value="" disabled>Selecciona el tipo…</option>
+      @for (t of tiposComercio; track t) {
+        <option [value]="t">{{ tipoComercioLabel[t] }}</option>
+      }
+    </select>
+    @if (isFieldInvalid('businessType')) {
+      <p class="mt-1 text-sm text-error">El tipo de comercio es obligatorio.</p>
+    }
+  </div>
+
+  <div>
     <label for="city" class="mb-1 block text-sm font-medium text-text"> Ciudad </label>
     <input
       id="city"
