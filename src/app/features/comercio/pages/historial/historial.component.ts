@@ -164,9 +164,21 @@ export class HistorialComponent implements OnInit {
         this.paqueteACancelar.set(null);
         this.cargar();
       },
-      error: () => {
+      // Contrato confirmado con backend: 403 (ajeno), 404 (inexistente), 409 (no
+      // cancelable desde el estado actual).
+      error: (err) => {
         this.paqueteACancelar.set(null);
-        this.errorCancelar.set('No se pudo dar de baja el paquete. Intenta de nuevo.');
+        if (err?.status === 409) {
+          this.errorCancelar.set(
+            'El paquete ya no se puede dar de baja porque su estado cambió.',
+          );
+        } else if (err?.status === 403) {
+          this.errorCancelar.set('No tienes permisos para dar de baja este paquete.');
+        } else if (err?.status === 404) {
+          this.errorCancelar.set('El paquete ya no existe.');
+        } else {
+          this.errorCancelar.set('No se pudo dar de baja el paquete. Intenta de nuevo.');
+        }
       },
     });
   }

@@ -37,9 +37,8 @@ export class PaquetesService {
   }
 
   // Historial de publicaciones del comercio actual: GET /merchants/me/packages
-  // con filtros de branchId/status y paginación (skip/take).
-  // NOTA: contrato esperado con backend. Si el endpoint aún no existe, este método
-  // queda listo para conectarse cuando el backend lo exponga.
+  // (contrato confirmado con backend). Filtros branchId/status y paginación
+  // (skip/take); sin status → devuelve todos los estados, ordenado createdAt desc.
   cargarMisPaquetes(
     query?: PaquetesDeMiComercioQuery,
   ): Observable<PaginatedData<Paquete>> {
@@ -48,8 +47,8 @@ export class PaquetesService {
     );
   }
 
-  // Dar de baja un paquete propio: PATCH /packages/:id/cancel.
-  // NOTA: contrato esperado con backend (misma dependencia que cargarMisPaquetes).
+  // Dar de baja un paquete propio: PATCH /packages/:id/cancel (contrato confirmado
+  // con backend). Soft delete a CANCELLED; 409 si no está AVAILABLE/RESERVED.
   cancelarPaquete(id: string): Observable<Paquete> {
     return this.api.patch<Paquete>(`/packages/${id}/cancel`, {});
   }
@@ -67,6 +66,9 @@ export class PaquetesService {
     }
     if (query.status) {
       params.push(`status=${encodeURIComponent(query.status)}`);
+    }
+    if (query.businessType) {
+      params.push(`businessType=${encodeURIComponent(query.businessType)}`);
     }
     if (query.skip !== undefined) {
       params.push(`skip=${query.skip}`);

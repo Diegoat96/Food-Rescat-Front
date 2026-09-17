@@ -73,8 +73,7 @@ export class InicioComponent implements OnInit, OnDestroy {
   }
 
   // Últimas publicaciones reales: GET /merchants/me/packages (take=5).
-  // NOTA: misma dependencia de backend que la Tarea 4 (historial). Si el endpoint
-  // aún no existe, la sección queda vacía hasta que el backend lo exponga.
+  // Contrato confirmado con backend.
   cargarUltimas(): void {
     this.paquetesService.cargarMisPaquetes({ take: 5 }).subscribe({
       next: (pag) => {

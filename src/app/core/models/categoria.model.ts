@@ -3,9 +3,10 @@ export interface Categoria {
   name: string;
 }
 
-// Etiquetas en español para las categorías que hoy envía el backend en inglés.
-// Fallback frontend: si el backend migra a español los datos, el mapping sigue
-// devolviendo el nombre original cuando no matchea.
+// Etiquetas en español para las categorías. El backend ya entrega nombres en
+// español (migración 20260917000000_translate_categories_to_spanish); este
+// mapping queda como fallback seguro para datos legacy, devolviendo el nombre
+// original cuando no matchea ninguna clave.
 export const CATEGORY_LABELS_ES: Record<string, string> = {
   Bakery: 'Panadería',
   Dairy: 'Lácteos',

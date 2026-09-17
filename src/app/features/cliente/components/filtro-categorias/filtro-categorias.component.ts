@@ -1,15 +1,17 @@
 import { Component, input, output } from '@angular/core';
+import { TipoComercio } from '../../../../core/models/paquete.model';
 
-// Tipo de comercio que debe exponer el backend en paquete.branch.businessType.
-// NOTA: contrato esperado con backend; los valores deben coincidir con el enum
-// del backend (por defecto: CAFETERIA, RESTAURANTE, PANADERIA, COMIDA_RAPIDA, OTRO).
-export const TIPOS_COMERCIO = [
+// Tipo de comercio de la sucursal, expuesto por el backend en
+// paquete.branch.businessType (contrato confirmado). Los valores coinciden con
+// el enum BusinessType del backend: CAFETERIA, RESTAURANTE, PANADERIA,
+// COMIDA_RAPIDA, OTRO.
+export const TIPOS_COMERCIO: { value: TipoComercio; label: string }[] = [
   { value: 'CAFETERIA', label: 'Cafetería' },
   { value: 'RESTAURANTE', label: 'Restaurante' },
   { value: 'PANADERIA', label: 'Panadería' },
   { value: 'COMIDA_RAPIDA', label: 'Comida rápida' },
   { value: 'OTRO', label: 'Otro' },
-] as const;
+];
 
 export const CATEGORIAS_CHIPS = [
   { value: 'Todo', label: 'Todo' },
