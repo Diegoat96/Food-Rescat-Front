@@ -56,7 +56,7 @@ export class HistorialComponent implements OnInit {
     this.paquetesService
       .cargarMisPaquetes({
         branchId: this.sucursalFiltro() || undefined,
-        status: this.estadoFiltro() || undefined,
+        status: this.estadoFiltro() ? (this.estadoFiltro() as EstadoPaquete) : undefined,
         skip: this.pagina() * TAKE,
         take: TAKE,
       })
