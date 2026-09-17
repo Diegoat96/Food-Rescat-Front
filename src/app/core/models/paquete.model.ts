@@ -4,6 +4,7 @@ export interface Paquete {
   id: string;
   name: string;
   description?: string;
+  imageUrl?: string;
   category: { id: string; name: string } | null;
   branch: { id: string; name: string; address: string; city?: string } | null;
   quantity: number;
@@ -14,6 +15,8 @@ export interface Paquete {
   status: EstadoPaquete;
   urgent?: boolean;
   discountPercentage?: number;
+  ratingAverage?: number;
+  ratingCount?: number;
 }
 
 export interface PaqueteRequest {
