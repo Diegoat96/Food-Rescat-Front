@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
@@ -53,10 +54,15 @@ export class LoginComponent {
         this.isLoading.set(false);
         this.authService.redirectByRole(res.user.role);
       },
-      error: (err: { status: number }) => {
+      error: (err: HttpErrorResponse) => {
         this.isLoading.set(false);
         if (err.status === 401) {
-          this.errorMessage.set('Credenciales inválidas. Verifica tu correo y contraseña.');
+          const backendMessage = (err.error as { message?: string } | null)?.message;
+          this.errorMessage.set(
+            backendMessage === 'Account suspended'
+              ? 'Tu cuenta está suspendida. Contacta al administrador.'
+              : 'Credenciales inválidas. Verifica tu correo y contraseña.',
+          );
         } else if (err.status === 409) {
           this.errorMessage.set('Este correo ya está registrado. Inicia sesión.');
         } else {

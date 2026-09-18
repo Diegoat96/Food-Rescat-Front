@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { SucursalesService } from '../../../../core/services/sucursales.service';
-import { Sucursal, SucursalRequest } from '../../../../core/models/sucursal.model';
+import { Sucursal, SucursalRequest, tipoComercioLabel } from '../../../../core/models/sucursal.model';
 import { SucursalFormComponent } from './sucursal-form.component';
 import { LoadingSpinnerComponent } from '../../../../core/components/loading-spinner/loading-spinner.component';
 import { EmptyStateComponent } from '../../../../core/components/empty-state/empty-state.component';
@@ -22,6 +22,8 @@ export class SucursalesComponent implements OnInit {
   readonly mostrandoFormulario = signal(false);
   readonly editando = signal<Sucursal | null>(null);
   readonly guardando = signal(false);
+
+  readonly tipoComercioLabel = tipoComercioLabel;
 
   ngOnInit(): void {
     this.sucursalesService.cargar().subscribe();

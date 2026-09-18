@@ -1,9 +1,19 @@
-import { Component, OnInit, computed, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { interval, Subscription } from 'rxjs';
 import { LucideAngularModule } from 'lucide-angular';
 import { PublicarPaqueteFormComponent } from '../../components/publicar-paquete-form/publicar-paquete-form.component';
 import { EstadisticasService } from '../../../../core/services/estadisticas.service';
+import { PaquetesService } from '../../../../core/services/paquetes.service';
+import { categoryLabel } from '../../../../core/models/categoria.model';
 import { LoadingSpinnerComponent } from '../../../../core/components/loading-spinner/loading-spinner.component';
+
+interface UltimaPublicacion {
+  titulo: string;
+  categoria: string;
+  hora: string;
+  estado: string;
+}
 
 @Component({
   selector: 'app-inicio',
@@ -12,11 +22,15 @@ import { LoadingSpinnerComponent } from '../../../../core/components/loading-spi
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.css',
 })
-export class InicioComponent implements OnInit {
+export class InicioComponent implements OnInit, OnDestroy {
   private estadisticasService = inject(EstadisticasService);
+  private paquetesService = inject(PaquetesService);
+  private sub?: Subscription;
 
   readonly kpis = this.estadisticasService.kpis;
   readonly cargandoKpis = this.estadisticasService.cargandoKpis;
+
+  readonly ultimas = signal<UltimaPublicacion[]>([]);
 
   readonly metricas = computed(() => {
     const k = this.kpis();
@@ -39,22 +53,70 @@ export class InicioComponent implements OnInit {
     ];
   });
 
-  readonly ultimas = [
-    {
-      titulo: 'Verduras de temporada',
-      categoria: 'Frutas y Verduras',
-      hora: '10:30',
-      estado: 'Activo',
-    },
-    { titulo: 'Pan artesanal', categoria: 'Panadería', hora: '09:15', estado: 'Activo' },
-    { titulo: 'Bebidas sin azúcar', categoria: 'Bebidas', hora: '08:40', estado: 'Pendiente' },
-  ];
-
   ngOnInit(): void {
     this.cargarKpis();
+    this.cargarUltimas();
+
+    // Refresco automático cada 30s (mismo patrón que estadisticas-hoy.component)
+    this.sub = interval(30000).subscribe(() => {
+      this.cargarKpis();
+      this.cargarUltimas();
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.sub?.unsubscribe();
   }
 
   cargarKpis(): void {
     this.estadisticasService.cargarKpis().subscribe();
+  }
+
+  // Últimas publicaciones reales: GET /merchants/me/packages (take=5).
+  // Contrato confirmado con backend.
+  cargarUltimas(): void {
+    this.paquetesService.cargarMisPaquetes({ take: 5 }).subscribe({
+      next: (pag) => {
+        this.ultimas.set(
+          pag.data.map((p) => ({
+            titulo: p.name,
+            categoria: categoryLabel(p.category?.name) || '—',
+            hora: this.horaRecogida(p.pickupDeadline),
+            estado: this.etiquetaEstado(p.status),
+          })),
+        );
+      },
+      error: () => {
+        this.ultimas.set([]);
+      },
+    });
+  }
+
+  private horaRecogida(iso: string): string {
+    if (!iso) {
+      return '—';
+    }
+    const fecha = new Date(iso);
+    if (Number.isNaN(fecha.getTime())) {
+      return '—';
+    }
+    return fecha.toLocaleTimeString('es-GT', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  private etiquetaEstado(estado: string): string {
+    switch (estado) {
+      case 'AVAILABLE':
+        return 'Activo';
+      case 'RESERVED':
+        return 'Pendiente';
+      case 'PICKED_UP':
+        return 'Recogido';
+      case 'EXPIRED':
+        return 'Vencido';
+      case 'CANCELLED':
+        return 'Cancelado';
+      default:
+        return estado;
+    }
   }
 }

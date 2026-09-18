@@ -1,6 +1,7 @@
 import { Component, OnInit, forwardRef, inject, signal } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { CategoriasService } from '../../../../core/services/categorias.service';
+import { categoryLabel } from '../../../../core/models/categoria.model';
 
 @Component({
   selector: 'app-categoria-select',
@@ -21,6 +22,8 @@ export class CategoriaSelectComponent implements ControlValueAccessor, OnInit {
 
   readonly categorias = this.categoriasService.categorias;
   readonly value = signal<string>('');
+
+  readonly categoryLabel = categoryLabel;
 
   private onChange: (value: string) => void = () => {};
   private onTouched: () => void = () => {};
