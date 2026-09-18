@@ -1,4 +1,5 @@
 import { EstadoPaquete } from './estado-paquete.enum';
+import { TipoComercio } from './sucursal.model';
 
 export interface Paquete {
   id: string;
@@ -6,7 +7,15 @@ export interface Paquete {
   description?: string;
   imageUrl?: string;
   category: { id: string; name: string } | null;
-  branch: { id: string; name: string; address: string; city?: string } | null;
+  branch: {
+    id: string;
+    name: string;
+    address: string;
+    city?: string;
+    // Tipo de comercio de la sucursal (ver TipoComercio). Contrato confirmado
+    // con backend: GET /packages incluye branch.businessType.
+    businessType?: TipoComercio;
+  } | null;
   quantity: number;
   pickupDeadline: string;
   originalPrice: number | null;
@@ -34,6 +43,14 @@ export interface PaqueteRequest {
 export interface PaquetesQuery {
   city?: string;
   categoryId?: string;
+  status?: EstadoPaquete;
+  businessType?: string;
+  skip?: number;
+  take?: number;
+}
+
+export interface PaquetesDeMiComercioQuery {
+  branchId?: string;
   status?: EstadoPaquete;
   skip?: number;
   take?: number;
