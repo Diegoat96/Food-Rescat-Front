@@ -1,6 +1,11 @@
 import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Sucursal, SucursalRequest } from '../../../../core/models/sucursal.model';
+import {
+  Sucursal,
+  SucursalRequest,
+  TIPOS_COMERCIO,
+  TIPOS_COMERCIO_LABELS,
+} from '../../../../core/models/sucursal.model';
 
 @Component({
   selector: 'app-sucursal-form',
@@ -21,6 +26,7 @@ export class SucursalFormComponent {
         city: value.city ?? '',
         phone: value.phone ?? '',
         openingHours: value.openingHours ?? '',
+        businessType: value.businessType ?? '',
       });
     } else {
       this.form.reset({
@@ -29,6 +35,7 @@ export class SucursalFormComponent {
         city: '',
         phone: '',
         openingHours: '',
+        businessType: '',
       });
     }
   }
@@ -39,9 +46,13 @@ export class SucursalFormComponent {
 
   private _sucursal: Sucursal | null = null;
 
+  readonly tiposComercio = TIPOS_COMERCIO;
+  readonly tipoComercioLabel = TIPOS_COMERCIO_LABELS;
+
   readonly form: FormGroup = this.fb.group({
     name: ['', [Validators.required]],
     address: ['', [Validators.required]],
+    businessType: ['', [Validators.required]],
     city: [''],
     phone: [''],
     openingHours: [''],

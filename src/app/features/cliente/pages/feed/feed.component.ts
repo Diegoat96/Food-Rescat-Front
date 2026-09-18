@@ -44,8 +44,13 @@ export class FeedComponent {
     const texto = this.busqueda().trim().toLowerCase();
     const cat = this.seleccionCategoria();
     return this.paquetes().filter((p) => {
+      // Filtra por tipo de comercio de la sucursal (no por categoría de producto).
+      // Contrato confirmado con backend: paquete.branch.businessType con valores
+      // CAFETERIA/RESTAURANTE/PANADERIA/COMIDA_RAPIDA/OTRO. El filtro principal se
+      // aplica server-side (businessType=) al llamar a cargar; este filtrado local
+      // queda como red de seguridad.
       const matchCat =
-        cat === 'Todo' || (p.category?.name ?? '').toLowerCase() === cat.toLowerCase();
+        cat === 'Todo' || (p.branch?.businessType ?? '') === cat;
       const matchTexto =
         texto === '' || `${p.name} ${p.branch?.name ?? ''}`.toLowerCase().includes(texto);
       return matchCat && matchTexto;
@@ -70,16 +75,25 @@ export class FeedComponent {
 
   constructor() {
     effect(() => {
-      this.paquetesService.cargar().subscribe();
+      this.cargarConFiltro();
       const id = setInterval(() => {
-        this.paquetesService.cargar().subscribe();
+        this.cargarConFiltro();
       }, 30000);
       this.destroyRef.onDestroy(() => clearInterval(id));
     });
   }
 
+  // Carga el feed respetando el tipo de comercio seleccionado (filtro server-side
+  // vía businessType= en GET /packages).
+  private cargarConFiltro(): void {
+    const cat = this.seleccionCategoria();
+    const query = cat === 'Todo' ? undefined : { businessType: cat };
+    this.paquetesService.cargar(query).subscribe();
+  }
+
   onSeleccionCategoria(cat: string): void {
     this.seleccionCategoria.set(cat);
+    this.cargarConFiltro();
   }
 
   onBusqueda(event: Event): void {
@@ -92,6 +106,6 @@ export class FeedComponent {
 
   cerrarTicket(): void {
     this.ticket.set(null);
-    this.paquetesService.cargar().subscribe();
+    this.cargarConFiltro();
   }
 }

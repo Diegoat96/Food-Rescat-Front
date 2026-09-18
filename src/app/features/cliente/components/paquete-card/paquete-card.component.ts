@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, computed, inject, signal } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
 import { Paquete } from '../../../../core/models/paquete.model';
+import { categoryLabel } from '../../../../core/models/categoria.model';
 import { EstadoBadgeComponent } from '../estado-badge/estado-badge.component';
 import { ReservasService } from '../../../../core/services/reservas.service';
 import { Reserva } from '../../../../core/models/reserva.model';
@@ -76,7 +77,7 @@ export class PaqueteCardComponent {
   }
 
   iconoCategoria(): string {
-    const nombre = this.paquete.category?.name?.toLowerCase() ?? '';
+    const nombre = categoryLabel(this.paquete.category?.name).toLowerCase();
     if (nombre.includes('pan')) {
       return 'croissant';
     }

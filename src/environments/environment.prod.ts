@@ -1,7 +1,4 @@
 export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:3000/api',
+  production: true,
+  apiUrl: 'https://food-rescat-back-mdln.onrender.com/api',
 };
-
-
-
