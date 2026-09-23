@@ -716,7 +716,7 @@ Si el backend no retorna ninguno de esos campos, el frontend usa mensajes predet
 | 409 | El registro ya existe. |
 | 500 | Error interno del servidor. Intentar de nuevo. |
 
-**Excepción**: Los códigos 401 en `/auth/login` y `/auth/register` no pasan por el interceptor de errores para permitir que el componente maneje el error de credenciales inválidas de forma específica.
+**Excepción**: Los codigos 401 en `/auth/login` y `/auth/register` no pasan por el interceptor de errores para permitir que el componente maneje el error de credenciales inválidas de forma específica.
 
 ---
 
