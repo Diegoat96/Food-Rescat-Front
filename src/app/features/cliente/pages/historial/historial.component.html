@@ -27,15 +27,18 @@
     />
   } @else {
     <div class="space-y-4">
-      @for (r of reservas(); track r.id) {
+      @for (item of reservas(); track item.id) {
+        @let r = item;
         <article class="rounded-2xl border border-border bg-surface p-5 shadow-sm">
           <div class="flex items-start justify-between gap-3">
             <div>
-              <h3 class="text-lg font-bold text-text">{{ r.packageName ?? 'Paquete' }}</h3>
+              <h3 class="text-lg font-bold text-text">
+                {{ $any(r).package?.name ?? r.packageName ?? 'Paquete rescatado' }}
+              </h3>
               <p class="mt-0.5 text-sm text-text-muted">
-                {{ r.branchName ?? 'Sucursal' }}
-                @if (r.branchCity) {
-                  · {{ r.branchCity }}
+                {{ $any(r).branch?.name ?? r.branchName ?? 'Sucursal' }}
+                @if ($any(r).branch?.city ?? r.branchCity) {
+                  · {{ $any(r).branch?.city ?? r.branchCity }}
                 }
               </p>
               @if (fecha(r)) {
