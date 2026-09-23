@@ -17,7 +17,6 @@ export interface Reserva {
   createdAt?: string;
   updatedAt?: string;
   completedAt?: string;
-  // Campos de presentación compuestos en el front (no vienen del backend).
   packageName?: string;
   branchName?: string;
   branchCity?: string;
