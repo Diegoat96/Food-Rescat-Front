@@ -21,13 +21,11 @@ export class ImpactoClienteComponent implements OnInit, OnDestroy {
     if (!d) {
       return [
         { valor: '—', label: 'alimentos rescatados' },
-        { valor: '—', label: 'kg de CO₂ evitado' },
         { valor: '—', label: 'Q ahorrados' },
       ];
     }
     return [
       { valor: (d.totalRescues ?? 0).toLocaleString('es-GT'), label: 'alimentos rescatados' },
-      { valor: `${(d.kgSaved ?? 0).toLocaleString('es-GT')} kg`, label: 'de CO₂ evitado' },
       { valor: `Q${(d.totalSaved ?? 0).toFixed(2)}`, label: 'ahorrados' },
     ];
   });

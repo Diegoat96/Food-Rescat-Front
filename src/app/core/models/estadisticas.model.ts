@@ -1,5 +1,4 @@
 export interface EstadisticasHoy {
-  kgRescuedToday: number;
   ordersCompletedToday: number;
   revenueToday: number;
 }
@@ -7,6 +6,5 @@ export interface EstadisticasHoy {
 export interface EstadisticasKpis {
   activePackages: number;
   pendingToday: number;
-  kgRescuedToday: number;
   weeklyRevenue: number;
 }
