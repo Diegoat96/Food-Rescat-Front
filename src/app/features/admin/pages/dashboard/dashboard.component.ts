@@ -54,7 +54,6 @@ export class AdminDashboardComponent implements OnInit {
 
   readonly cards = computed(() => {
     const e = this.estadisticas();
-    const totalKg = e ? Number(e.kgRescuedTotal ?? 0).toLocaleString('es-GT') : '0';
     const totalPaquetes = e
       ? (e.packagesByStatus ?? []).reduce((sum, p) => sum + Number(p.count), 0)
       : 0;
@@ -65,7 +64,6 @@ export class AdminDashboardComponent implements OnInit {
         valor: String(this.usuarios().filter((u) => u.role === Rol.BUSINESS).length),
         icono: 'store',
       },
-      { label: 'Kg rescatados', valor: totalKg, icono: 'leaf' },
       { label: 'Paquetes publicados', valor: String(totalPaquetes), icono: 'package' },
     ];
   });
