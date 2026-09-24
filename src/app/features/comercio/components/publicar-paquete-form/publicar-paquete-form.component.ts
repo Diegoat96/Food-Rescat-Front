@@ -9,18 +9,29 @@ import { PaquetesService } from '../../../../core/services/paquetes.service';
 
 // Validador personalizado para asegurar coherencia en los precios
 function validarPrecios(control: AbstractControl): ValidationErrors | null {
-  const original = Number(control.get('originalPrice')?.value);
-  const descuento = Number(control.get('discountedPrice')?.value);
-  
-  if (Number.isFinite(original) && Number.isFinite(descuento)) {
-    // Si el descuento es mayor que el precio original -> Error
-    if (descuento > original) {
-      return { descuentoMayor: true };
-    }
-    // Si el descuento es negativo -> Error
-    if (descuento < 0) {
-      return { descuentoNegativo: true };
-    }
+  const rawOriginal = control.get('originalPrice')?.value;
+  const rawDescuento = control.get('discountedPrice')?.value;
+
+  const original =
+    rawOriginal === null || rawOriginal === undefined || rawOriginal === ''
+      ? null
+      : Number(rawOriginal);
+  const descuento =
+    rawDescuento === null || rawDescuento === undefined || rawDescuento === ''
+      ? null
+      : Number(rawDescuento);
+
+  if (original === null || descuento === null) {
+    return null;
+  }
+
+  // Si el descuento es mayor que el precio original -> Error
+  if (descuento > original) {
+    return { descuentoMayor: true };
+  }
+  // Si el descuento es negativo -> Error
+  if (descuento < 0) {
+    return { descuentoNegativo: true };
   }
   return null;
 }
@@ -175,8 +186,17 @@ export class PublicarPaqueteFormComponent {
     if (!sucursalId) {
       return;
     }
-    const original = Number(this.form.get('originalPrice')?.value) || 0;
-    const descuento = Number(this.form.get('discountedPrice')?.value) ?? 0;
+    const rawOriginal = this.form.get('originalPrice')?.value;
+    const rawDescuento = this.form.get('discountedPrice')?.value;
+
+    const original =
+      rawOriginal === null || rawOriginal === undefined || rawOriginal === ''
+        ? null
+        : Number(rawOriginal);
+    const descuento =
+      rawDescuento === null || rawDescuento === undefined || rawDescuento === ''
+        ? null
+        : Number(rawDescuento);
 
     const formData = new FormData();
     formData.append('name', this.form.get('name')?.value ?? '');
@@ -192,10 +212,10 @@ export class PublicarPaqueteFormComponent {
       this.horaRecogida(this.form.get('pickupDeadline')?.value),
     );
     formData.append('estimatedWeightKg', '0');
-    if (original > 0) {
+    if (original !== null && original > 0) {
       formData.append('originalPrice', String(original));
     }
-    if (descuento > 0) {
+    if (descuento !== null) {
       formData.append('discountedPrice', String(descuento));
     }
     const imagen = this.imagenFile();

@@ -41,11 +41,6 @@ export class InicioComponent implements OnInit, OnDestroy {
       { label: 'Paquetes activos', valor: String(k.activePackages ?? 0), icono: 'package' },
       { label: 'Pendientes hoy', valor: String(k.pendingToday ?? 0), icono: 'hourglass' },
       {
-        label: 'Kg rescatados hoy',
-        valor: `${Number(k.kgRescuedToday ?? 0).toLocaleString('es-GT')} kg`,
-        icono: 'leaf',
-      },
-      {
         label: 'Ingresos esta semana',
         valor: `Q${Number(k.weeklyRevenue ?? 0).toFixed(2)}`,
         icono: 'wallet',
