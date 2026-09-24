@@ -5,6 +5,7 @@ import { SucursalesService } from '../../../../core/services/sucursales.service'
 import { Paquete } from '../../../../core/models/paquete.model';
 import { EstadoPaquete } from '../../../../core/models/estado-paquete.enum';
 import { categoryLabel } from '../../../../core/models/categoria.model';
+import { packageStatusLabel } from '../../../../shared/utils/package-status.util';
 import { LoadingSpinnerComponent } from '../../../../core/components/loading-spinner/loading-spinner.component';
 import { EmptyStateComponent } from '../../../../core/components/empty-state/empty-state.component';
 import { ConfirmDialogComponent } from '../../../../core/components/confirm-dialog/confirm-dialog.component';
@@ -42,6 +43,7 @@ export class HistorialComponent implements OnInit {
   readonly errorCancelar = signal<string | null>(null);
 
   readonly estados = Object.values(EstadoPaquete);
+  readonly packageStatusLabel = packageStatusLabel;
 
   readonly totalPaginas = computed(() => Math.max(1, Math.ceil(this.total() / TAKE)));
 
@@ -124,19 +126,20 @@ export class HistorialComponent implements OnInit {
   }
 
   badge(estado: string): { bag: string; texto: string } {
+    const texto = packageStatusLabel(estado);
     switch (estado) {
       case EstadoPaquete.AVAILABLE:
-        return { bag: 'bg-green-100 text-green-800', texto: 'Disponible' };
+        return { bag: 'bg-green-100 text-green-800', texto };
       case EstadoPaquete.RESERVED:
-        return { bag: 'bg-blue-100 text-blue-800', texto: 'Reservado' };
+        return { bag: 'bg-blue-100 text-blue-800', texto };
       case EstadoPaquete.PICKED_UP:
-        return { bag: 'bg-gray-100 text-gray-600', texto: 'Recogido' };
+        return { bag: 'bg-gray-100 text-gray-600', texto };
       case EstadoPaquete.EXPIRED:
-        return { bag: 'bg-red-100 text-red-700', texto: 'Vencido' };
+        return { bag: 'bg-red-100 text-red-700', texto };
       case EstadoPaquete.CANCELLED:
-        return { bag: 'bg-red-100 text-red-700', texto: 'Cancelado' };
+        return { bag: 'bg-red-100 text-red-700', texto };
       default:
-        return { bag: 'bg-gray-100 text-gray-600', texto: estado };
+        return { bag: 'bg-gray-100 text-gray-600', texto };
     }
   }
 

@@ -1,5 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-import { Observable, of, tap } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { ApiService } from './api.service';
 import { Reserva } from '../models/reserva.model';
 
@@ -32,9 +32,7 @@ export class ReservasService {
     );
   }
 
-  // NOTA: el backend real NO expone un endpoint de historial de reservas del cliente
-  // (verificado en /api/docs-json). No se inventa una ruta; se retorna vacío.
   misReservas(): Observable<Reserva[]> {
-    return of([]);
+    return this.api.get<Reserva[]>('/customers/me/reservations');
   }
 }

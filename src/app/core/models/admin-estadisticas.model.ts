@@ -10,7 +10,6 @@ export interface PackageStatusCount {
 }
 
 export interface AdminEstadisticas {
-  kgRescuedTotal: number;
   topBranches: TopBranch[];
   packagesByStatus: PackageStatusCount[];
 }

@@ -18,11 +18,6 @@ export class EstadisticasHoyComponent implements OnInit, OnDestroy {
   readonly datos = this.estadisticasService.estadisticasHoy;
   readonly cargando = this.estadisticasService.cargando;
 
-  readonly kgFormateado = computed(() => {
-    const d = this.datos();
-    return d ? `${Number(d.kgRescuedToday ?? 0).toLocaleString('es-GT')} kg` : '0 kg';
-  });
-
   readonly ingresosFormateado = computed(() => {
     const d = this.datos();
     return d ? `Q${Number(d.revenueToday ?? 0).toFixed(2)}` : 'Q0.00';
