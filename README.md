@@ -611,7 +611,7 @@ RescateDiario = {
 ### 7.8 Persistencia de sesión
 
 ```
-1. Al momento de cargar la aplicación (app.component.ngOnInit):
+1. Al momento de cargar la aplicacion (app.component.ngOnInit):
    a. Se verifica si existe token en localStorage (key: access_token)
    b. Si NO existe: sesión no autenticada, usuario permanece null
    c. Si existe: GET /auth/me con header Authorization: Bearer <token>
